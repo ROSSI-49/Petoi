@@ -75,7 +75,7 @@ duration: 发声时长（单位：微秒，此参数为可选参数) – 无符�
 
 为了实现该程序，还需要使用头文件对声调和对应PWM进行如下的声明
 
-.. literalinclude:: toneMelody\pitches.h
+.. literalinclude:: \toneMelody\pitches.h
    :language: c
    :linenos:
    :name: pitches.h
@@ -85,14 +85,14 @@ duration: 发声时长（单位：微秒，此参数为可选参数) – 无符�
 
 单个光传感器的实例
 
-.. literalinclude:: singleLight\singleLight.ino
+.. literalinclude:: \singleLight\singleLight.ino
    :language: c
    :linenos:
    :name: singleLight.ino
 
 两个光传感器的实例，可以实现对光源的左右位置判断
 
-.. literalinclude:: doubleLight\doubleLight.ino
+.. literalinclude:: \doubleLight\doubleLight.ino
    :language: c
    :linenos:
    :name: doubleLight.ino
