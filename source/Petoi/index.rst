@@ -19,7 +19,7 @@ Petoi机器狗入门(施工中)
     + 超声波实现跟随
 
 .. toctree::
-   :maxdepth: 3
+   :maxdepth: 2
 
    petoi_guide/introduce
    demos/demos
