@@ -38,7 +38,7 @@
 ==================================================
 本例程为模拟信号输入的一个简单例程，也是多种传感器使用的基础。代码如下：
 
-.. literalinclude:: analogRead\analogRead.ino
+.. literalinclude:: analogRead/analogRead.ino
    :language: c
    :linenos:
    :name: analogRead.c
@@ -68,7 +68,7 @@ duration: 发声时长（单位：微秒，此参数为可选参数) – 无符�
 
 以下为蜂鸣器的示例程序：
 
-.. literalinclude:: toneMelody\toneMelody.ino
+.. literalinclude:: toneMelody/toneMelody.ino
    :language: c
    :linenos:
    :name: toneMelody.c
@@ -85,14 +85,14 @@ duration: 发声时长（单位：微秒，此参数为可选参数) – 无符�
 
 单个光传感器的实例
 
-.. literalinclude:: \singleLight\singleLight.ino
+.. literalinclude:: singleLight/singleLight.ino
    :language: c
    :linenos:
    :name: singleLight.ino
 
 两个光传感器的实例，可以实现对光源的左右位置判断
 
-.. literalinclude:: \doubleLight\doubleLight.ino
+.. literalinclude:: /doubleLight/doubleLight.ino
    :language: c
    :linenos:
    :name: doubleLight.ino
@@ -100,7 +100,7 @@ duration: 发声时长（单位：微秒，此参数为可选参数) – 无符�
 1.7 手势传感器
 ==================================================
 
-.. literalinclude:: gesture\gesture.ino
+.. literalinclude:: gesture/gesture.ino
    :language: c
    :linenos:
    :name: gesture.ino
