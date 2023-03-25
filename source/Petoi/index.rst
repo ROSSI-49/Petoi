@@ -22,4 +22,4 @@ Petoi机器狗入门(施工中)
    :maxdepth: 3
 
    petoi_guide/introduce
-   Demos/demos
+   demos/demos
