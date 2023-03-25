@@ -53,9 +53,10 @@
 <li class="toctree-l3"><a class="reference internal" href="#id1">1.2 学会说话：串口通讯与串口监视器</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#id2">1.3 模拟信号的读取</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#id3">1.4 数字信号的读取（施工中）</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#id4">1.5 蜂鸣器</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#id5">1.6 光传感器</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#id6">1.7 手势传感器</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#pwm">1.5 输出PWM信号</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#id4">1.6 蜂鸣器</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#id5">1.7 光传感器</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#id6">1.8 手势传感器</a></li>
 </ul>
 </li>
 </ul>
@@ -79,7 +80,7 @@
           <li class="breadcrumb-item"><a href="../index.html">Petoi机器狗入门(施工中)</a></li>
       <li class="breadcrumb-item active">2 Petoi + Arduino开发例程</li>
       <li class="wy-breadcrumbs-aside">
-            <a href="../../_sources/Petoi/Demos/demos.rst.txt" rel="nofollow"> 查看页面源码</a>
+            <a href="../../_sources/Petoi/demos/demos.rst.txt" rel="nofollow"> 查看页面源码</a>
       </li>
   </ul>
   <hr/>
@@ -158,8 +159,60 @@
 <section id="id3">
 <h2>1.4 数字信号的读取（施工中）<a class="headerlink" href="#id3" title="此标题的永久链接"></a></h2>
 </section>
+<section id="pwm">
+<h2>1.5 输出PWM信号<a class="headerlink" href="#pwm" title="此标题的永久链接"></a></h2>
+<p>PWM波常用来进行舵机等的控制，在Arduino的内置库中集成了 <code class="docutils literal notranslate"><span class="pre">Servo.h</span></code> 用来完成对于伺服电机的控制。库提供了两种方法：</p>
+<p><code class="docutils literal notranslate"><span class="pre">Knob</span></code> : 用电位器控制伺服的位置。</p>
+<p><code class="docutils literal notranslate"><span class="pre">Sweep</span></code> : 扫描伺服电机前进后退的轴。</p>
+<p>具体的使用可查看IDE中所提供的示例</p>
+<p>同样，Arduino也设计了用来控制步进电机的库文件 <code class="docutils literal notranslate"><span class="pre">Stepper.h</span></code>。
+更普遍的情况是，你需要自己来产生一个具有特定性质(频率，参考电压，占空比等)的PWM波，有两种较为常见的方法来实现：</p>
+<p>1、利用循环和延时在主程序中实现PWM波的输出，代码如下：</p>
+<div class="highlight-c notranslate"><div class="highlight"><pre><span></span><span class="linenos">1</span><span class="kt">void</span> <span class="nf">loop</span><span class="p">()</span>
+<span class="linenos">2</span><span class="p">{</span>
+<span class="linenos">3</span>   <span class="n">digitalWrite</span><span class="p">(</span><span class="mi">13</span><span class="p">,</span> <span class="n">HIGH</span><span class="p">);</span>
+<span class="linenos">4</span>   <span class="n">delayMicroseconds</span><span class="p">(</span><span class="mi">100</span><span class="p">);</span> <span class="c1">// Approximately 10% duty cycle @ 1KHz</span>
+<span class="linenos">5</span>   <span class="n">digitalWrite</span><span class="p">(</span><span class="mi">13</span><span class="p">,</span> <span class="n">LOW</span><span class="p">);</span>
+<span class="linenos">6</span>   <span class="n">delayMicroseconds</span><span class="p">(</span><span class="mi">1000</span><span class="p">);</span>
+<span class="linenos">7</span><span class="p">}</span>
+</pre></div>
+</div>
+<p>这样实现的PWM波的漏洞是很大的他对于资源的占用很多，且由于循环本身存在延时，程序较为繁杂的时候，延时误差很大，如果是其他的单片机，我们常常通过一个中断的方式输出PWM，利用现有的时钟进行触发，仅通过分频就能够实现十分精准的周期控制。Arduino也有类似的操作。Arduino内置了三个定时器：Timer0负责控制delay等函数，一般不做改动；Timer1的计数器是16位的；因此我们一般对Timer2来进行分频，实现不同的频率，占空比的PWM输出，参考代码如下：</p>
+<div class="highlight-c notranslate"><div class="highlight"><pre><span></span><span class="linenos"> 1</span><span class="kt">void</span> <span class="nf">setup</span><span class="p">()</span> <span class="p">{</span>
+<span class="linenos"> 2</span>   <span class="c1">// put your setup code here, to run once:</span>
+<span class="linenos"> 3</span>
+<span class="linenos"> 4</span>   <span class="n">pinMode</span><span class="p">(</span><span class="mi">3</span><span class="p">,</span> <span class="n">OUTPUT</span><span class="p">);</span>
+<span class="linenos"> 5</span>   <span class="n">pinMode</span><span class="p">(</span><span class="mi">11</span><span class="p">,</span> <span class="n">OUTPUT</span><span class="p">);</span>
+<span class="linenos"> 6</span>
+<span class="linenos"> 7</span>   <span class="n">TCCR2A</span> <span class="o">=</span> <span class="n">_BV</span><span class="p">(</span><span class="n">COM2A0</span><span class="p">)</span> <span class="o">|</span> <span class="n">_BV</span><span class="p">(</span><span class="n">COM2B1</span><span class="p">)</span> <span class="o">|</span> <span class="n">_BV</span><span class="p">(</span><span class="n">WGM21</span><span class="p">)</span> <span class="o">|</span> <span class="n">_BV</span><span class="p">(</span><span class="n">WGM20</span><span class="p">);</span> <span class="c1">//Set Timer2 to varying top limit fast PWM mode</span>
+<span class="linenos"> 8</span>   <span class="n">TCCR2B</span> <span class="o">=</span> <span class="n">_BV</span><span class="p">(</span><span class="n">WGM22</span><span class="p">)</span> <span class="o">|</span> <span class="n">_BV</span><span class="p">(</span><span class="n">CS22</span><span class="p">)</span> <span class="o">|</span> <span class="n">_BV</span><span class="p">(</span><span class="n">CS21</span><span class="p">)</span> <span class="o">|</span> <span class="n">_BV</span><span class="p">(</span><span class="n">CS20</span><span class="p">);</span><span class="c1">//another way to set prescaler CS2=fff</span>
+<span class="linenos"> 9</span>
+<span class="linenos">10</span>   <span class="n">OCR2A</span> <span class="o">=</span> <span class="mi">155</span><span class="p">;</span> <span class="c1">//Top value A</span>
+<span class="linenos">11</span>   <span class="n">OCR2B</span> <span class="o">=</span> <span class="mi">30</span><span class="p">;</span> <span class="c1">//Toggle value B, Output at pin 3</span>
+<span class="linenos">12</span>
+<span class="linenos">13</span>   <span class="c1">//CS2  Divisor  Frequency</span>
+<span class="linenos">14</span>   <span class="c1">//001    1        31372.55</span>
+<span class="linenos">15</span>   <span class="c1">//010    8        3921.16</span>
+<span class="linenos">16</span>   <span class="c1">//011    32       980.39</span>
+<span class="linenos">17</span>   <span class="c1">//100    64       490.20   &lt;--DEFAULT</span>
+<span class="linenos">18</span>   <span class="c1">//101    128      245.10</span>
+<span class="linenos">19</span>   <span class="c1">//110    256      122.55</span>
+<span class="linenos">20</span>   <span class="c1">//111    1024     30.64</span>
+<span class="linenos">21</span><span class="p">}</span>
+<span class="linenos">22</span>
+<span class="linenos">23</span><span class="kt">void</span> <span class="nf">loop</span><span class="p">()</span> <span class="p">{</span>
+<span class="linenos">24</span><span class="c1">// put your main code here, to run repeatedly:</span>
+<span class="linenos">25</span>
+<span class="linenos">26</span><span class="p">}</span>
+</pre></div>
+</div>
+<p>接下来简要解读这部分的代码。首先是 <code class="docutils literal notranslate"><span class="pre">pinMode()</span></code> 这个函数的功能已经在前文中叙述过了。可以发现这里选择的引脚是 <code class="docutils literal notranslate"><span class="pre">pin3</span></code> 和 <code class="docutils literal notranslate"><span class="pre">pin4</span></code> 这是因为 <code class="docutils literal notranslate"><span class="pre">Timer2</span></code> 所控制的 <code class="docutils literal notranslate"><span class="pre">pin</span></code> 脚正是3和11；如果想了解其他 <code class="docutils literal notranslate"><span class="pre">pin</span></code> 的设置，请参阅Arduino对应开发板的官方手册(datasheet)。</p>
+<p>TCCR2A/B是用来控制Timer2计数器的模式与预除数的大小从而实现对于主时钟的分频，它名字中的2就是此意，CS2位是来控制Timer2计数器预除数的。以本示例中的代码为例： _BV(CS22) | _BV(CS21) | _BV(CS20)的三部分由逻辑按位或“|”连接；每个BV是按位赋注（bit value）的意思；_BV(CS22 )= 在CS2里，1&lt;&lt;2(把1左移2位) = 00000100；得到三部分分别是00000100，00000010，00000001；按位或最终得到0111；查代码里的表得到对应的预除数是1024。这样，我们所得到的实际频率就是：16 MHz / 1024</p>
+<p>OCR2A/B：这是计时器中的两个比较寄存器，OCR2A控制pin11的占空比，OCR2B控制pin3的占空比。计时器中还有一个0~255的计数器。每过一个时钟周期，这个计数器的数目就+1，当数目达到255后就自动清零。这个比较寄存器的实际作用是当计数器的数比其小的时候，输出为高电平，比其高的时候输出为低电平。</p>
+<p>显然，经过0~255的过程才是完成了一个PWM的周期，所以实际的PWM输出就是 16 MHz / 1024 / 64</p>
+</section>
 <section id="id4">
-<h2>1.5 蜂鸣器<a class="headerlink" href="#id4" title="此标题的永久链接"></a></h2>
+<h2>1.6 蜂鸣器<a class="headerlink" href="#id4" title="此标题的永久链接"></a></h2>
 <ul class="simple">
 <li><p>tone()</p></li>
 </ul>
@@ -224,104 +277,9 @@
 </pre></div>
 </div>
 <p>为了实现该程序，还需要使用头文件对声调和对应PWM进行如下的声明</p>
-<div class="highlight-c notranslate" id="pitches-h"><div class="highlight"><pre><span></span><span class="linenos"> 1</span><span class="cm">/*************************************************</span>
-<span class="linenos"> 2</span><span class="cm">   Public Constants</span>
-<span class="linenos"> 3</span><span class="cm"> *************************************************/</span>
-<span class="linenos"> 4</span>
-<span class="linenos"> 5</span><span class="cp">#define NOTE_B0  31</span>
-<span class="linenos"> 6</span><span class="cp">#define NOTE_C1  33</span>
-<span class="linenos"> 7</span><span class="cp">#define NOTE_CS1 35</span>
-<span class="linenos"> 8</span><span class="cp">#define NOTE_D1  37</span>
-<span class="linenos"> 9</span><span class="cp">#define NOTE_DS1 39</span>
-<span class="linenos">10</span><span class="cp">#define NOTE_E1  41</span>
-<span class="linenos">11</span><span class="cp">#define NOTE_F1  44</span>
-<span class="linenos">12</span><span class="cp">#define NOTE_FS1 46</span>
-<span class="linenos">13</span><span class="cp">#define NOTE_G1  49</span>
-<span class="linenos">14</span><span class="cp">#define NOTE_GS1 52</span>
-<span class="linenos">15</span><span class="cp">#define NOTE_A1  55</span>
-<span class="linenos">16</span><span class="cp">#define NOTE_AS1 58</span>
-<span class="linenos">17</span><span class="cp">#define NOTE_B1  62</span>
-<span class="linenos">18</span><span class="cp">#define NOTE_C2  65</span>
-<span class="linenos">19</span><span class="cp">#define NOTE_CS2 69</span>
-<span class="linenos">20</span><span class="cp">#define NOTE_D2  73</span>
-<span class="linenos">21</span><span class="cp">#define NOTE_DS2 78</span>
-<span class="linenos">22</span><span class="cp">#define NOTE_E2  82</span>
-<span class="linenos">23</span><span class="cp">#define NOTE_F2  87</span>
-<span class="linenos">24</span><span class="cp">#define NOTE_FS2 93</span>
-<span class="linenos">25</span><span class="cp">#define NOTE_G2  98</span>
-<span class="linenos">26</span><span class="cp">#define NOTE_GS2 104</span>
-<span class="linenos">27</span><span class="cp">#define NOTE_A2  110</span>
-<span class="linenos">28</span><span class="cp">#define NOTE_AS2 117</span>
-<span class="linenos">29</span><span class="cp">#define NOTE_B2  123</span>
-<span class="linenos">30</span><span class="cp">#define NOTE_C3  131</span>
-<span class="linenos">31</span><span class="cp">#define NOTE_CS3 139</span>
-<span class="linenos">32</span><span class="cp">#define NOTE_D3  147</span>
-<span class="linenos">33</span><span class="cp">#define NOTE_DS3 156</span>
-<span class="linenos">34</span><span class="cp">#define NOTE_E3  165</span>
-<span class="linenos">35</span><span class="cp">#define NOTE_F3  175</span>
-<span class="linenos">36</span><span class="cp">#define NOTE_FS3 185</span>
-<span class="linenos">37</span><span class="cp">#define NOTE_G3  196</span>
-<span class="linenos">38</span><span class="cp">#define NOTE_GS3 208</span>
-<span class="linenos">39</span><span class="cp">#define NOTE_A3  220</span>
-<span class="linenos">40</span><span class="cp">#define NOTE_AS3 233</span>
-<span class="linenos">41</span><span class="cp">#define NOTE_B3  247</span>
-<span class="linenos">42</span><span class="cp">#define NOTE_C4  262</span>
-<span class="linenos">43</span><span class="cp">#define NOTE_CS4 277</span>
-<span class="linenos">44</span><span class="cp">#define NOTE_D4  294</span>
-<span class="linenos">45</span><span class="cp">#define NOTE_DS4 311</span>
-<span class="linenos">46</span><span class="cp">#define NOTE_E4  330</span>
-<span class="linenos">47</span><span class="cp">#define NOTE_F4  349</span>
-<span class="linenos">48</span><span class="cp">#define NOTE_FS4 370</span>
-<span class="linenos">49</span><span class="cp">#define NOTE_G4  392</span>
-<span class="linenos">50</span><span class="cp">#define NOTE_GS4 415</span>
-<span class="linenos">51</span><span class="cp">#define NOTE_A4  440</span>
-<span class="linenos">52</span><span class="cp">#define NOTE_AS4 466</span>
-<span class="linenos">53</span><span class="cp">#define NOTE_B4  494</span>
-<span class="linenos">54</span><span class="cp">#define NOTE_C5  523</span>
-<span class="linenos">55</span><span class="cp">#define NOTE_CS5 554</span>
-<span class="linenos">56</span><span class="cp">#define NOTE_D5  587</span>
-<span class="linenos">57</span><span class="cp">#define NOTE_DS5 622</span>
-<span class="linenos">58</span><span class="cp">#define NOTE_E5  659</span>
-<span class="linenos">59</span><span class="cp">#define NOTE_F5  698</span>
-<span class="linenos">60</span><span class="cp">#define NOTE_FS5 740</span>
-<span class="linenos">61</span><span class="cp">#define NOTE_G5  784</span>
-<span class="linenos">62</span><span class="cp">#define NOTE_GS5 831</span>
-<span class="linenos">63</span><span class="cp">#define NOTE_A5  880</span>
-<span class="linenos">64</span><span class="cp">#define NOTE_AS5 932</span>
-<span class="linenos">65</span><span class="cp">#define NOTE_B5  988</span>
-<span class="linenos">66</span><span class="cp">#define NOTE_C6  1047</span>
-<span class="linenos">67</span><span class="cp">#define NOTE_CS6 1109</span>
-<span class="linenos">68</span><span class="cp">#define NOTE_D6  1175</span>
-<span class="linenos">69</span><span class="cp">#define NOTE_DS6 1245</span>
-<span class="linenos">70</span><span class="cp">#define NOTE_E6  1319</span>
-<span class="linenos">71</span><span class="cp">#define NOTE_F6  1397</span>
-<span class="linenos">72</span><span class="cp">#define NOTE_FS6 1480</span>
-<span class="linenos">73</span><span class="cp">#define NOTE_G6  1568</span>
-<span class="linenos">74</span><span class="cp">#define NOTE_GS6 1661</span>
-<span class="linenos">75</span><span class="cp">#define NOTE_A6  1760</span>
-<span class="linenos">76</span><span class="cp">#define NOTE_AS6 1865</span>
-<span class="linenos">77</span><span class="cp">#define NOTE_B6  1976</span>
-<span class="linenos">78</span><span class="cp">#define NOTE_C7  2093</span>
-<span class="linenos">79</span><span class="cp">#define NOTE_CS7 2217</span>
-<span class="linenos">80</span><span class="cp">#define NOTE_D7  2349</span>
-<span class="linenos">81</span><span class="cp">#define NOTE_DS7 2489</span>
-<span class="linenos">82</span><span class="cp">#define NOTE_E7  2637</span>
-<span class="linenos">83</span><span class="cp">#define NOTE_F7  2794</span>
-<span class="linenos">84</span><span class="cp">#define NOTE_FS7 2960</span>
-<span class="linenos">85</span><span class="cp">#define NOTE_G7  3136</span>
-<span class="linenos">86</span><span class="cp">#define NOTE_GS7 3322</span>
-<span class="linenos">87</span><span class="cp">#define NOTE_A7  3520</span>
-<span class="linenos">88</span><span class="cp">#define NOTE_AS7 3729</span>
-<span class="linenos">89</span><span class="cp">#define NOTE_B7  3951</span>
-<span class="linenos">90</span><span class="cp">#define NOTE_C8  4186</span>
-<span class="linenos">91</span><span class="cp">#define NOTE_CS8 4435</span>
-<span class="linenos">92</span><span class="cp">#define NOTE_D8  4699</span>
-<span class="linenos">93</span><span class="cp">#define NOTE_DS8 4978</span>
-</pre></div>
-</div>
 </section>
 <section id="id5">
-<h2>1.6 光传感器<a class="headerlink" href="#id5" title="此标题的永久链接"></a></h2>
+<h2>1.7 光传感器<a class="headerlink" href="#id5" title="此标题的永久链接"></a></h2>
 <p>单个光传感器的实例</p>
 <div class="highlight-c notranslate" id="singlelight-ino"><div class="highlight"><pre><span></span><span class="linenos"> 1</span><span class="cp">#define IR_PIN    4   </span><span class="c1">// Signal Pin of IR receiver to Arduino Digital Pin 4</span>
 <span class="linenos"> 2</span><span class="cp">#define BUZZER    5</span>
@@ -366,40 +324,9 @@
 </pre></div>
 </div>
 <p>两个光传感器的实例，可以实现对光源的左右位置判断</p>
-<div class="highlight-c notranslate" id="doublelight-ino"><div class="highlight"><pre><span></span><span class="linenos"> 1</span><span class="cp">#define IR_PIN    4   </span><span class="c1">// Signal Pin of IR receiver to Arduino Digital Pin 4</span>
-<span class="linenos"> 2</span><span class="cp">#define BUZZER    5</span>
-<span class="linenos"> 3</span>
-<span class="linenos"> 4</span><span class="c1">//Consistency and shifts</span>
-<span class="linenos"> 5</span><span class="c1">//Source of error</span>
-<span class="linenos"> 6</span><span class="c1">//Calibration</span>
-<span class="linenos"> 7</span><span class="c1">//Comparison</span>
-<span class="linenos"> 8</span>
-<span class="linenos"> 9</span><span class="kt">void</span> <span class="nf">setup</span><span class="p">()</span> <span class="p">{</span>
-<span class="linenos">10</span>  <span class="c1">// put your setup code here, to run once:</span>
-<span class="linenos">11</span>  <span class="n">Serial</span><span class="p">.</span><span class="n">begin</span><span class="p">(</span><span class="mi">115200</span><span class="p">);</span>
-<span class="linenos">12</span>  <span class="n">Serial</span><span class="p">.</span><span class="n">setTimeout</span><span class="p">(</span><span class="mi">2</span><span class="p">);</span>
-<span class="linenos">13</span><span class="p">}</span>
-<span class="linenos">14</span>
-<span class="linenos">15</span><span class="kt">void</span> <span class="nf">loop</span><span class="p">()</span> <span class="p">{</span>
-<span class="linenos">16</span>  <span class="c1">// put your main code here, to run repeatedly:</span>
-<span class="linenos">17</span>
-<span class="linenos">18</span>  <span class="n">Serial</span><span class="p">.</span><span class="n">print</span><span class="p">(</span><span class="n">analogRead</span><span class="p">(</span><span class="n">A2</span><span class="p">));</span>
-<span class="linenos">19</span>  <span class="n">Serial</span><span class="p">.</span><span class="n">print</span><span class="p">(</span><span class="sc">&#39;\t&#39;</span><span class="p">);</span>
-<span class="linenos">20</span>  <span class="n">Serial</span><span class="p">.</span><span class="n">print</span><span class="p">(</span><span class="n">analogRead</span><span class="p">(</span><span class="n">A3</span><span class="p">));</span>
-<span class="linenos">21</span>
-<span class="linenos">22</span>  <span class="n">Serial</span><span class="p">.</span><span class="n">print</span><span class="p">(</span><span class="sc">&#39;\t&#39;</span><span class="p">);</span>
-<span class="linenos">23</span>  <span class="n">Serial</span><span class="p">.</span><span class="n">print</span><span class="p">(</span><span class="mi">0</span><span class="p">);</span>
-<span class="linenos">24</span>  <span class="n">Serial</span><span class="p">.</span><span class="n">print</span><span class="p">(</span><span class="sc">&#39;\t&#39;</span><span class="p">);</span>
-<span class="linenos">25</span>  <span class="n">Serial</span><span class="p">.</span><span class="n">print</span><span class="p">(</span><span class="mi">1024</span><span class="p">);</span>
-<span class="linenos">26</span>
-<span class="linenos">27</span>  <span class="n">Serial</span><span class="p">.</span><span class="n">println</span><span class="p">();</span>
-<span class="linenos">28</span>  <span class="n">delay</span><span class="p">(</span><span class="mi">2</span><span class="p">);</span>
-<span class="linenos">29</span><span class="p">}</span>
-</pre></div>
-</div>
 </section>
 <section id="id6">
-<h2>1.7 手势传感器<a class="headerlink" href="#id6" title="此标题的永久链接"></a></h2>
+<h2>1.8 手势传感器<a class="headerlink" href="#id6" title="此标题的永久链接"></a></h2>
 <div class="highlight-c notranslate" id="gesture-ino"><div class="highlight"><pre><span></span><span class="linenos"> 1</span><span class="cm">/*</span>
 <span class="linenos"> 2</span><span class="cm">  APDS-9960 - Gesture Sensor</span>
 <span class="linenos"> 3</span><span class="cm">  https://www.arduino.cc/reference/en/libraries/arduino_apds9960/</span>
