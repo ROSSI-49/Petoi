@@ -1,0 +1,504 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="zh-CN" >
+<head>
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>2 Petoi + Arduino开发例程 &mdash; petoi实验 v1.0 文档</title>
+      <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js"></script>
+        <script src="../../_static/jquery.js"></script>
+        <script src="../../_static/underscore.js"></script>
+        <script src="../../_static/_sphinx_javascript_frameworks_compat.js"></script>
+        <script src="../../_static/doctools.js"></script>
+        <script src="../../_static/translations.js"></script>
+    <script src="../../_static/js/theme.js"></script>
+    <link rel="index" title="索引" href="../../genindex.html" />
+    <link rel="search" title="搜索" href="../../search.html" />
+    <link rel="prev" title="1 Petoi相关资料" href="../petoi_guide/introduce.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../../index.html" class="icon icon-home">
+            petoi实验
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="搜索文档" aria-label="搜索文档" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="导航菜单">
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../../introduce.html">简介</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../arduino/index.html">Arduino基础环境配置</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="../index.html">Petoi机器狗入门(施工中)</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="../petoi_guide/introduce.html">1 Petoi相关资料</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">2 Petoi + Arduino开发例程</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#arduino-helloworld">1.1 第一个Arduino程序：helloWorld：</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#id1">1.2 学会说话：串口通讯与串口监视器</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#id2">1.3 模拟信号的读取</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#id3">1.4 数字信号的读取（施工中）</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#id4">1.5 蜂鸣器</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#id5">1.6 光传感器</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#id6">1.7 手势传感器</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="移动版导航菜单" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">petoi实验</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="页面导航">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../index.html">Petoi机器狗入门(施工中)</a></li>
+      <li class="breadcrumb-item active">2 Petoi + Arduino开发例程</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="../../_sources/Petoi/Demos/demos.rst.txt" rel="nofollow"> 查看页面源码</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="petoi-arduino">
+<h1>2 Petoi + Arduino开发例程<a class="headerlink" href="#petoi-arduino" title="此标题的永久链接"></a></h1>
+<section id="arduino-helloworld">
+<h2>1.1 第一个Arduino程序：helloWorld：<a class="headerlink" href="#arduino-helloworld" title="此标题的永久链接"></a></h2>
+<p>本例程为串口的简单使用，链接烧录器到电脑，配置串口接收器，就能够收到来自于Petoi发出的“helloWorld”</p>
+<div class="highlight-c notranslate" id="hello-c"><div class="highlight"><pre><span></span><span class="linenos"> 1</span><span class="kt">void</span> <span class="nf">setup</span><span class="p">()</span> <span class="p">{</span>
+<span class="linenos"> 2</span>  <span class="c1">// put your setup code here, to run once:</span>
+<span class="linenos"> 3</span>  <span class="n">Serial</span><span class="p">.</span><span class="n">begin</span><span class="p">(</span><span class="mi">115200</span><span class="p">);</span>
+<span class="linenos"> 4</span>  <span class="n">Serial</span><span class="p">.</span><span class="n">println</span><span class="p">(</span><span class="s">&quot;Hello World!&quot;</span><span class="p">);</span>
+<span class="linenos"> 5</span>  <span class="n">Serial</span><span class="p">.</span><span class="n">print</span><span class="p">(</span><span class="s">&quot;Welcome to Petoi!</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">);</span>
+<span class="linenos"> 6</span><span class="p">}</span>
+<span class="linenos"> 7</span>
+<span class="linenos"> 8</span><span class="kt">void</span> <span class="nf">loop</span><span class="p">()</span> <span class="p">{</span>
+<span class="linenos"> 9</span>  <span class="c1">// put your main code here, to run repeatedly:</span>
+<span class="linenos">10</span>
+<span class="linenos">11</span><span class="p">}</span>
+</pre></div>
+</div>
+</section>
+<section id="id1">
+<h2>1.2 学会说话：串口通讯与串口监视器<a class="headerlink" href="#id1" title="此标题的永久链接"></a></h2>
+<p>在前文中，我们已经简单的介绍了Arduino函数对于串口的使用，但ArduinoIDE的串口监视器还有一些设置的细节和应用。串行通讯的实质是协议，收发方按照一定的规则对数据进行编码，发送，接受，解码，从而实现串口的通讯。如果你想更深入的了解Arduino的串口数据形式，协议内容，硬件设计。请参阅： <a class="reference external" href="https://www.w3cschool.cn/arduino/arduino_communication.html">https://www.w3cschool.cn/arduino/arduino_communication.html</a> 和官方文档</p>
+<ul class="simple">
+<li><p><strong>串口绘图器的使用</strong></p></li>
+</ul>
+<p>在进行实验时，经常需要通过串口持续的检测模拟输入的值，那么能将这些数据通过折线图的方式绘制出来，就能帮助我们更好的记录和了解输入情况和变化。</p>
+<p>串口绘图仪实际上是从预设的串口获取值并将其绘制在xy轴图。X轴可以说是一个时间实例，读取数据的速度起快，滑动就越快。 Y轴代表来自串口的值，可以是单个也可以是一组 。在读取串口数据时遇到” <code class="docutils literal notranslate"><span class="pre">\n</span></code> “（换行或通过 <code class="docutils literal notranslate"><span class="pre">Serial.println(&quot;&quot;)</span></code> ）则表示切换到下一行数据，同行数据的不同组的数据通过( <code class="docutils literal notranslate"><span class="pre">,</span></code> )间隔。</p>
+<p>例如，如下的数据形式：</p>
+<blockquote>
+<div><p>100, 200, 300</p>
+<p>100, 200, 300</p>
+<p>100, 200, 300</p>
+<p>100, 200, 300</p>
+</div></blockquote>
+<p>最终可以得到三条直线。</p>
+<p>在实际的输出中，常常是一个大小不断变化的数值，串口绘图器会根据这些数据自动调整量程，从而来回跳变，为了避免这种变化，可以输入一个很大的常数，绘制直线来限制量程的变化</p>
+</section>
+<section id="id2">
+<h2>1.3 模拟信号的读取<a class="headerlink" href="#id2" title="此标题的永久链接"></a></h2>
+<p>本例程为模拟信号输入的一个简单例程，也是多种传感器使用的基础。代码如下：</p>
+<div class="highlight-c notranslate" id="analogread-c"><div class="highlight"><pre><span></span><span class="linenos"> 1</span><span class="cp">#define IR_PIN    4   </span><span class="c1">// Signal Pin of IR receiver to Arduino Digital Pin 4</span>
+<span class="linenos"> 2</span><span class="cp">#define BUZZER    5</span>
+<span class="linenos"> 3</span>
+<span class="linenos"> 4</span><span class="kt">void</span> <span class="nf">setup</span><span class="p">()</span> <span class="p">{</span>
+<span class="linenos"> 5</span>  <span class="c1">// put your setup code here, to run once:</span>
+<span class="linenos"> 6</span>  <span class="n">Serial</span><span class="p">.</span><span class="n">begin</span><span class="p">(</span><span class="mi">115200</span><span class="p">);</span>
+<span class="linenos"> 7</span><span class="p">}</span>
+<span class="linenos"> 8</span>
+<span class="linenos"> 9</span><span class="kt">void</span> <span class="nf">loop</span><span class="p">()</span> <span class="p">{</span>
+<span class="linenos">10</span>  <span class="c1">// put your main code here, to run repeatedly:</span>
+<span class="linenos">11</span>
+<span class="linenos">12</span>  <span class="n">Serial</span><span class="p">.</span><span class="n">print</span><span class="p">(</span><span class="n">analogRead</span><span class="p">(</span><span class="n">A2</span><span class="p">));</span>
+<span class="linenos">13</span>  <span class="n">Serial</span><span class="p">.</span><span class="n">print</span><span class="p">(</span><span class="sc">&#39;\t&#39;</span><span class="p">);</span>
+<span class="linenos">14</span>  <span class="n">Serial</span><span class="p">.</span><span class="n">print</span><span class="p">(</span><span class="n">analogRead</span><span class="p">(</span><span class="n">A3</span><span class="p">));</span>
+<span class="linenos">15</span>
+<span class="linenos">16</span>  <span class="n">Serial</span><span class="p">.</span><span class="n">print</span><span class="p">(</span><span class="sc">&#39;\t&#39;</span><span class="p">);</span>
+<span class="linenos">17</span>  <span class="n">Serial</span><span class="p">.</span><span class="n">print</span><span class="p">(</span><span class="mi">0</span><span class="p">);</span>
+<span class="linenos">18</span>  <span class="n">Serial</span><span class="p">.</span><span class="n">print</span><span class="p">(</span><span class="sc">&#39;\t&#39;</span><span class="p">);</span>
+<span class="linenos">19</span>  <span class="n">Serial</span><span class="p">.</span><span class="n">print</span><span class="p">(</span><span class="mi">1024</span><span class="p">);</span>
+<span class="linenos">20</span>
+<span class="linenos">21</span>  <span class="n">Serial</span><span class="p">.</span><span class="n">println</span><span class="p">();</span>
+<span class="linenos">22</span>  <span class="n">delay</span><span class="p">(</span><span class="mi">2</span><span class="p">);</span>
+<span class="linenos">23</span>
+<span class="linenos">24</span><span class="p">}</span>
+</pre></div>
+</div>
+<p>Arduino的模拟输入的范围为0~1024，即使不接入传感器，我们同样也可以对模拟接口人为的进行干扰(晃一晃，按一按啥的),就能看到数值的变化。该模块的输出同样可以使用串口绘图器及逆行观察。</p>
+</section>
+<section id="id3">
+<h2>1.4 数字信号的读取（施工中）<a class="headerlink" href="#id3" title="此标题的永久链接"></a></h2>
+</section>
+<section id="id4">
+<h2>1.5 蜂鸣器<a class="headerlink" href="#id4" title="此标题的永久链接"></a></h2>
+<ul class="simple">
+<li><p>tone()</p></li>
+</ul>
+<p><code class="docutils literal notranslate"><span class="pre">tone()</span></code> 函数可以产生固定频率的PWM信号来驱动扬声器发声。发声时间长度和声调都可以通过参数控制。定义发声时间长度有两种方法，第一种是通过 <code class="docutils literal notranslate"><span class="pre">tone()</span></code> 函数的参数来定义发声时长，另一种是使用 <code class="docutils literal notranslate"><span class="pre">noTone()</span></code> 函数来停止发声。</p>
+<p>参数</p>
+<p>pin: 发声引脚（该引脚需要连接扬声器）</p>
+<p>frequency: 发声频率（单位：赫兹） – 无符号整数型</p>
+<p>duration: 发声时长（单位：微秒，此参数为可选参数) – 无符号长整型</p>
+<p>返回值:
+无</p>
+<p>以下为蜂鸣器的示例程序：</p>
+<div class="highlight-c notranslate" id="tonemelody-c"><div class="highlight"><pre><span></span><span class="linenos"> 1</span><span class="cm">/*</span>
+<span class="linenos"> 2</span><span class="cm">  Melody</span>
+<span class="linenos"> 3</span>
+<span class="linenos"> 4</span><span class="cm">  Plays a melody</span>
+<span class="linenos"> 5</span>
+<span class="linenos"> 6</span><span class="cm">  circuit:</span>
+<span class="linenos"> 7</span><span class="cm">  - 8 ohm speaker on digital pin 8</span>
+<span class="linenos"> 8</span>
+<span class="linenos"> 9</span><span class="cm">  created 21 Jan 2010</span>
+<span class="linenos">10</span><span class="cm">  modified 30 Aug 2011</span>
+<span class="linenos">11</span><span class="cm">  by Tom Igoe</span>
+<span class="linenos">12</span>
+<span class="linenos">13</span><span class="cm">  This example code is in the public domain.</span>
+<span class="linenos">14</span>
+<span class="linenos">15</span><span class="cm">  https://www.arduino.cc/en/Tutorial/BuiltInExamples/toneMelody</span>
+<span class="linenos">16</span><span class="cm">*/</span>
+<span class="linenos">17</span>
+<span class="linenos">18</span><span class="cp">#include</span> <span class="cpf">&quot;pitches.h&quot;</span><span class="cp"></span>
+<span class="linenos">19</span>
+<span class="linenos">20</span><span class="c1">// notes in the melody:</span>
+<span class="linenos">21</span><span class="kt">int</span> <span class="n">melody</span><span class="p">[]</span> <span class="o">=</span> <span class="p">{</span>
+<span class="linenos">22</span>  <span class="n">NOTE_C4</span><span class="p">,</span> <span class="n">NOTE_G3</span><span class="p">,</span> <span class="n">NOTE_G3</span><span class="p">,</span> <span class="n">NOTE_A3</span><span class="p">,</span> <span class="n">NOTE_G3</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="n">NOTE_B3</span><span class="p">,</span> <span class="n">NOTE_C4</span>
+<span class="linenos">23</span><span class="p">};</span>
+<span class="linenos">24</span>
+<span class="linenos">25</span><span class="c1">// note durations: 4 = quarter note, 8 = eighth note, etc.:</span>
+<span class="linenos">26</span><span class="kt">int</span> <span class="n">noteDurations</span><span class="p">[]</span> <span class="o">=</span> <span class="p">{</span>
+<span class="linenos">27</span>  <span class="mi">4</span><span class="p">,</span> <span class="mi">8</span><span class="p">,</span> <span class="mi">8</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="mi">4</span>
+<span class="linenos">28</span><span class="p">};</span>
+<span class="linenos">29</span>
+<span class="linenos">30</span><span class="kt">void</span> <span class="nf">setup</span><span class="p">()</span> <span class="p">{</span>
+<span class="linenos">31</span>  <span class="c1">// iterate over the notes of the melody:</span>
+<span class="linenos">32</span>  <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">thisNote</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">thisNote</span> <span class="o">&lt;</span> <span class="mi">8</span><span class="p">;</span> <span class="n">thisNote</span><span class="o">++</span><span class="p">)</span> <span class="p">{</span>
+<span class="linenos">33</span>
+<span class="linenos">34</span>    <span class="c1">// to calculate the note duration, take one second divided by the note type.</span>
+<span class="linenos">35</span>    <span class="c1">//e.g. quarter note = 1000 / 4, eighth note = 1000/8, etc.</span>
+<span class="linenos">36</span>    <span class="kt">int</span> <span class="n">noteDuration</span> <span class="o">=</span> <span class="mi">1000</span> <span class="o">/</span> <span class="n">noteDurations</span><span class="p">[</span><span class="n">thisNote</span><span class="p">];</span>
+<span class="linenos">37</span>    <span class="n">tone</span><span class="p">(</span><span class="mi">5</span><span class="p">,</span> <span class="n">melody</span><span class="p">[</span><span class="n">thisNote</span><span class="p">],</span> <span class="n">noteDuration</span><span class="p">);</span>
+<span class="linenos">38</span>
+<span class="linenos">39</span>    <span class="c1">// to distinguish the notes, set a minimum time between them.</span>
+<span class="linenos">40</span>    <span class="c1">// the note&#39;s duration + 30% seems to work well:</span>
+<span class="linenos">41</span>    <span class="kt">int</span> <span class="n">pauseBetweenNotes</span> <span class="o">=</span> <span class="n">noteDuration</span> <span class="o">*</span> <span class="mf">1.30</span><span class="p">;</span>
+<span class="linenos">42</span>    <span class="n">delay</span><span class="p">(</span><span class="n">pauseBetweenNotes</span><span class="p">);</span>
+<span class="linenos">43</span>    <span class="c1">// stop the tone playing:</span>
+<span class="linenos">44</span>    <span class="n">noTone</span><span class="p">(</span><span class="mi">5</span><span class="p">);</span>
+<span class="linenos">45</span>  <span class="p">}</span>
+<span class="linenos">46</span><span class="p">}</span>
+<span class="linenos">47</span>
+<span class="linenos">48</span><span class="kt">void</span> <span class="nf">loop</span><span class="p">()</span> <span class="p">{</span>
+<span class="linenos">49</span>  <span class="c1">// no need to repeat the melody.</span>
+<span class="linenos">50</span><span class="p">}</span>
+</pre></div>
+</div>
+<p>为了实现该程序，还需要使用头文件对声调和对应PWM进行如下的声明</p>
+<div class="highlight-c notranslate" id="pitches-h"><div class="highlight"><pre><span></span><span class="linenos"> 1</span><span class="cm">/*************************************************</span>
+<span class="linenos"> 2</span><span class="cm">   Public Constants</span>
+<span class="linenos"> 3</span><span class="cm"> *************************************************/</span>
+<span class="linenos"> 4</span>
+<span class="linenos"> 5</span><span class="cp">#define NOTE_B0  31</span>
+<span class="linenos"> 6</span><span class="cp">#define NOTE_C1  33</span>
+<span class="linenos"> 7</span><span class="cp">#define NOTE_CS1 35</span>
+<span class="linenos"> 8</span><span class="cp">#define NOTE_D1  37</span>
+<span class="linenos"> 9</span><span class="cp">#define NOTE_DS1 39</span>
+<span class="linenos">10</span><span class="cp">#define NOTE_E1  41</span>
+<span class="linenos">11</span><span class="cp">#define NOTE_F1  44</span>
+<span class="linenos">12</span><span class="cp">#define NOTE_FS1 46</span>
+<span class="linenos">13</span><span class="cp">#define NOTE_G1  49</span>
+<span class="linenos">14</span><span class="cp">#define NOTE_GS1 52</span>
+<span class="linenos">15</span><span class="cp">#define NOTE_A1  55</span>
+<span class="linenos">16</span><span class="cp">#define NOTE_AS1 58</span>
+<span class="linenos">17</span><span class="cp">#define NOTE_B1  62</span>
+<span class="linenos">18</span><span class="cp">#define NOTE_C2  65</span>
+<span class="linenos">19</span><span class="cp">#define NOTE_CS2 69</span>
+<span class="linenos">20</span><span class="cp">#define NOTE_D2  73</span>
+<span class="linenos">21</span><span class="cp">#define NOTE_DS2 78</span>
+<span class="linenos">22</span><span class="cp">#define NOTE_E2  82</span>
+<span class="linenos">23</span><span class="cp">#define NOTE_F2  87</span>
+<span class="linenos">24</span><span class="cp">#define NOTE_FS2 93</span>
+<span class="linenos">25</span><span class="cp">#define NOTE_G2  98</span>
+<span class="linenos">26</span><span class="cp">#define NOTE_GS2 104</span>
+<span class="linenos">27</span><span class="cp">#define NOTE_A2  110</span>
+<span class="linenos">28</span><span class="cp">#define NOTE_AS2 117</span>
+<span class="linenos">29</span><span class="cp">#define NOTE_B2  123</span>
+<span class="linenos">30</span><span class="cp">#define NOTE_C3  131</span>
+<span class="linenos">31</span><span class="cp">#define NOTE_CS3 139</span>
+<span class="linenos">32</span><span class="cp">#define NOTE_D3  147</span>
+<span class="linenos">33</span><span class="cp">#define NOTE_DS3 156</span>
+<span class="linenos">34</span><span class="cp">#define NOTE_E3  165</span>
+<span class="linenos">35</span><span class="cp">#define NOTE_F3  175</span>
+<span class="linenos">36</span><span class="cp">#define NOTE_FS3 185</span>
+<span class="linenos">37</span><span class="cp">#define NOTE_G3  196</span>
+<span class="linenos">38</span><span class="cp">#define NOTE_GS3 208</span>
+<span class="linenos">39</span><span class="cp">#define NOTE_A3  220</span>
+<span class="linenos">40</span><span class="cp">#define NOTE_AS3 233</span>
+<span class="linenos">41</span><span class="cp">#define NOTE_B3  247</span>
+<span class="linenos">42</span><span class="cp">#define NOTE_C4  262</span>
+<span class="linenos">43</span><span class="cp">#define NOTE_CS4 277</span>
+<span class="linenos">44</span><span class="cp">#define NOTE_D4  294</span>
+<span class="linenos">45</span><span class="cp">#define NOTE_DS4 311</span>
+<span class="linenos">46</span><span class="cp">#define NOTE_E4  330</span>
+<span class="linenos">47</span><span class="cp">#define NOTE_F4  349</span>
+<span class="linenos">48</span><span class="cp">#define NOTE_FS4 370</span>
+<span class="linenos">49</span><span class="cp">#define NOTE_G4  392</span>
+<span class="linenos">50</span><span class="cp">#define NOTE_GS4 415</span>
+<span class="linenos">51</span><span class="cp">#define NOTE_A4  440</span>
+<span class="linenos">52</span><span class="cp">#define NOTE_AS4 466</span>
+<span class="linenos">53</span><span class="cp">#define NOTE_B4  494</span>
+<span class="linenos">54</span><span class="cp">#define NOTE_C5  523</span>
+<span class="linenos">55</span><span class="cp">#define NOTE_CS5 554</span>
+<span class="linenos">56</span><span class="cp">#define NOTE_D5  587</span>
+<span class="linenos">57</span><span class="cp">#define NOTE_DS5 622</span>
+<span class="linenos">58</span><span class="cp">#define NOTE_E5  659</span>
+<span class="linenos">59</span><span class="cp">#define NOTE_F5  698</span>
+<span class="linenos">60</span><span class="cp">#define NOTE_FS5 740</span>
+<span class="linenos">61</span><span class="cp">#define NOTE_G5  784</span>
+<span class="linenos">62</span><span class="cp">#define NOTE_GS5 831</span>
+<span class="linenos">63</span><span class="cp">#define NOTE_A5  880</span>
+<span class="linenos">64</span><span class="cp">#define NOTE_AS5 932</span>
+<span class="linenos">65</span><span class="cp">#define NOTE_B5  988</span>
+<span class="linenos">66</span><span class="cp">#define NOTE_C6  1047</span>
+<span class="linenos">67</span><span class="cp">#define NOTE_CS6 1109</span>
+<span class="linenos">68</span><span class="cp">#define NOTE_D6  1175</span>
+<span class="linenos">69</span><span class="cp">#define NOTE_DS6 1245</span>
+<span class="linenos">70</span><span class="cp">#define NOTE_E6  1319</span>
+<span class="linenos">71</span><span class="cp">#define NOTE_F6  1397</span>
+<span class="linenos">72</span><span class="cp">#define NOTE_FS6 1480</span>
+<span class="linenos">73</span><span class="cp">#define NOTE_G6  1568</span>
+<span class="linenos">74</span><span class="cp">#define NOTE_GS6 1661</span>
+<span class="linenos">75</span><span class="cp">#define NOTE_A6  1760</span>
+<span class="linenos">76</span><span class="cp">#define NOTE_AS6 1865</span>
+<span class="linenos">77</span><span class="cp">#define NOTE_B6  1976</span>
+<span class="linenos">78</span><span class="cp">#define NOTE_C7  2093</span>
+<span class="linenos">79</span><span class="cp">#define NOTE_CS7 2217</span>
+<span class="linenos">80</span><span class="cp">#define NOTE_D7  2349</span>
+<span class="linenos">81</span><span class="cp">#define NOTE_DS7 2489</span>
+<span class="linenos">82</span><span class="cp">#define NOTE_E7  2637</span>
+<span class="linenos">83</span><span class="cp">#define NOTE_F7  2794</span>
+<span class="linenos">84</span><span class="cp">#define NOTE_FS7 2960</span>
+<span class="linenos">85</span><span class="cp">#define NOTE_G7  3136</span>
+<span class="linenos">86</span><span class="cp">#define NOTE_GS7 3322</span>
+<span class="linenos">87</span><span class="cp">#define NOTE_A7  3520</span>
+<span class="linenos">88</span><span class="cp">#define NOTE_AS7 3729</span>
+<span class="linenos">89</span><span class="cp">#define NOTE_B7  3951</span>
+<span class="linenos">90</span><span class="cp">#define NOTE_C8  4186</span>
+<span class="linenos">91</span><span class="cp">#define NOTE_CS8 4435</span>
+<span class="linenos">92</span><span class="cp">#define NOTE_D8  4699</span>
+<span class="linenos">93</span><span class="cp">#define NOTE_DS8 4978</span>
+</pre></div>
+</div>
+</section>
+<section id="id5">
+<h2>1.6 光传感器<a class="headerlink" href="#id5" title="此标题的永久链接"></a></h2>
+<p>单个光传感器的实例</p>
+<div class="highlight-c notranslate" id="singlelight-ino"><div class="highlight"><pre><span></span><span class="linenos"> 1</span><span class="cp">#define IR_PIN    4   </span><span class="c1">// Signal Pin of IR receiver to Arduino Digital Pin 4</span>
+<span class="linenos"> 2</span><span class="cp">#define BUZZER    5</span>
+<span class="linenos"> 3</span>
+<span class="linenos"> 4</span>
+<span class="linenos"> 5</span><span class="c1">//Sensitivity and saturation</span>
+<span class="linenos"> 6</span><span class="c1">//Threshold and binarization</span>
+<span class="linenos"> 7</span><span class="c1">//Analog and digital data</span>
+<span class="linenos"> 8</span><span class="c1">//DigitalRead(): analog pins allow digital read</span>
+<span class="linenos"> 9</span><span class="c1">//Changes in the environment</span>
+<span class="linenos">10</span><span class="c1">//Patterns: rock scissors cloth</span>
+<span class="linenos">11</span><span class="c1">//Scanning</span>
+<span class="linenos">12</span>
+<span class="linenos">13</span><span class="kt">void</span> <span class="nf">setup</span><span class="p">()</span> <span class="p">{</span>
+<span class="linenos">14</span>  <span class="c1">// put your setup code here, to run once:</span>
+<span class="linenos">15</span>  <span class="n">Serial</span><span class="p">.</span><span class="n">begin</span><span class="p">(</span><span class="mi">115200</span><span class="p">);</span>
+<span class="linenos">16</span><span class="p">}</span>
+<span class="linenos">17</span>
+<span class="linenos">18</span><span class="kt">void</span> <span class="nf">loop</span><span class="p">()</span> <span class="p">{</span>
+<span class="linenos">19</span>  <span class="c1">// put your main code here, to run repeatedly:</span>
+<span class="linenos">20</span>  <span class="kt">int</span> <span class="n">reading1</span> <span class="o">=</span> <span class="n">analogRead</span><span class="p">(</span><span class="n">A2</span><span class="p">);</span>
+<span class="linenos">21</span>  <span class="kt">int</span> <span class="n">reading2</span> <span class="o">=</span> <span class="n">digitalRead</span><span class="p">(</span><span class="n">A2</span><span class="p">);</span>
+<span class="linenos">22</span>  <span class="n">Serial</span><span class="p">.</span><span class="n">print</span><span class="p">(</span><span class="n">reading1</span><span class="p">);</span>
+<span class="linenos">23</span>  <span class="n">Serial</span><span class="p">.</span><span class="n">print</span><span class="p">(</span><span class="sc">&#39;\t&#39;</span><span class="p">);</span>
+<span class="linenos">24</span>  <span class="n">Serial</span><span class="p">.</span><span class="n">print</span><span class="p">(</span><span class="n">reading2</span><span class="p">);</span>
+<span class="linenos">25</span>  <span class="n">Serial</span><span class="p">.</span><span class="n">print</span><span class="p">(</span><span class="sc">&#39;\t&#39;</span><span class="p">);</span>
+<span class="linenos">26</span>  <span class="c1">//  Serial.print(digitalRead(6));</span>
+<span class="linenos">27</span>
+<span class="linenos">28</span><span class="c1">//  Serial.print(&#39;\t&#39;);</span>
+<span class="linenos">29</span><span class="c1">//  Serial.print(0);</span>
+<span class="linenos">30</span><span class="c1">//  Serial.print(&#39;\t&#39;);</span>
+<span class="linenos">31</span><span class="c1">//  Serial.print(1024);</span>
+<span class="linenos">32</span><span class="c1">//  Serial.print(&#39;\t&#39;);</span>
+<span class="linenos">33</span><span class="c1">//  if (reading &gt; 10)</span>
+<span class="linenos">34</span><span class="c1">//    Serial.print(&quot;1\tbright&quot;);</span>
+<span class="linenos">35</span><span class="c1">//  else</span>
+<span class="linenos">36</span><span class="c1">//    Serial.print(&quot;0\tdark&quot;);</span>
+<span class="linenos">37</span>
+<span class="linenos">38</span>  <span class="n">Serial</span><span class="p">.</span><span class="n">println</span><span class="p">();</span>
+<span class="linenos">39</span>  <span class="n">delay</span><span class="p">(</span><span class="mi">2</span><span class="p">);</span>
+<span class="linenos">40</span><span class="p">}</span>
+</pre></div>
+</div>
+<p>两个光传感器的实例，可以实现对光源的左右位置判断</p>
+<div class="highlight-c notranslate" id="doublelight-ino"><div class="highlight"><pre><span></span><span class="linenos"> 1</span><span class="cp">#define IR_PIN    4   </span><span class="c1">// Signal Pin of IR receiver to Arduino Digital Pin 4</span>
+<span class="linenos"> 2</span><span class="cp">#define BUZZER    5</span>
+<span class="linenos"> 3</span>
+<span class="linenos"> 4</span><span class="c1">//Consistency and shifts</span>
+<span class="linenos"> 5</span><span class="c1">//Source of error</span>
+<span class="linenos"> 6</span><span class="c1">//Calibration</span>
+<span class="linenos"> 7</span><span class="c1">//Comparison</span>
+<span class="linenos"> 8</span>
+<span class="linenos"> 9</span><span class="kt">void</span> <span class="nf">setup</span><span class="p">()</span> <span class="p">{</span>
+<span class="linenos">10</span>  <span class="c1">// put your setup code here, to run once:</span>
+<span class="linenos">11</span>  <span class="n">Serial</span><span class="p">.</span><span class="n">begin</span><span class="p">(</span><span class="mi">115200</span><span class="p">);</span>
+<span class="linenos">12</span>  <span class="n">Serial</span><span class="p">.</span><span class="n">setTimeout</span><span class="p">(</span><span class="mi">2</span><span class="p">);</span>
+<span class="linenos">13</span><span class="p">}</span>
+<span class="linenos">14</span>
+<span class="linenos">15</span><span class="kt">void</span> <span class="nf">loop</span><span class="p">()</span> <span class="p">{</span>
+<span class="linenos">16</span>  <span class="c1">// put your main code here, to run repeatedly:</span>
+<span class="linenos">17</span>
+<span class="linenos">18</span>  <span class="n">Serial</span><span class="p">.</span><span class="n">print</span><span class="p">(</span><span class="n">analogRead</span><span class="p">(</span><span class="n">A2</span><span class="p">));</span>
+<span class="linenos">19</span>  <span class="n">Serial</span><span class="p">.</span><span class="n">print</span><span class="p">(</span><span class="sc">&#39;\t&#39;</span><span class="p">);</span>
+<span class="linenos">20</span>  <span class="n">Serial</span><span class="p">.</span><span class="n">print</span><span class="p">(</span><span class="n">analogRead</span><span class="p">(</span><span class="n">A3</span><span class="p">));</span>
+<span class="linenos">21</span>
+<span class="linenos">22</span>  <span class="n">Serial</span><span class="p">.</span><span class="n">print</span><span class="p">(</span><span class="sc">&#39;\t&#39;</span><span class="p">);</span>
+<span class="linenos">23</span>  <span class="n">Serial</span><span class="p">.</span><span class="n">print</span><span class="p">(</span><span class="mi">0</span><span class="p">);</span>
+<span class="linenos">24</span>  <span class="n">Serial</span><span class="p">.</span><span class="n">print</span><span class="p">(</span><span class="sc">&#39;\t&#39;</span><span class="p">);</span>
+<span class="linenos">25</span>  <span class="n">Serial</span><span class="p">.</span><span class="n">print</span><span class="p">(</span><span class="mi">1024</span><span class="p">);</span>
+<span class="linenos">26</span>
+<span class="linenos">27</span>  <span class="n">Serial</span><span class="p">.</span><span class="n">println</span><span class="p">();</span>
+<span class="linenos">28</span>  <span class="n">delay</span><span class="p">(</span><span class="mi">2</span><span class="p">);</span>
+<span class="linenos">29</span><span class="p">}</span>
+</pre></div>
+</div>
+</section>
+<section id="id6">
+<h2>1.7 手势传感器<a class="headerlink" href="#id6" title="此标题的永久链接"></a></h2>
+<div class="highlight-c notranslate" id="gesture-ino"><div class="highlight"><pre><span></span><span class="linenos"> 1</span><span class="cm">/*</span>
+<span class="linenos"> 2</span><span class="cm">  APDS-9960 - Gesture Sensor</span>
+<span class="linenos"> 3</span><span class="cm">  https://www.arduino.cc/reference/en/libraries/arduino_apds9960/</span>
+<span class="linenos"> 4</span>
+<span class="linenos"> 5</span><span class="cm">  This example reads gesture data from the on-board APDS-9960 sensor of the</span>
+<span class="linenos"> 6</span><span class="cm">  Nano 33 BLE Sense and prints any detected gestures to the Serial Monitor.</span>
+<span class="linenos"> 7</span>
+<span class="linenos"> 8</span><span class="cm">  Gesture directions are as follows:</span>
+<span class="linenos"> 9</span><span class="cm">  - UP:    from USB connector towards antenna</span>
+<span class="linenos">10</span><span class="cm">  - DOWN:  from antenna towards USB connector</span>
+<span class="linenos">11</span><span class="cm">  - LEFT:  from analog pins side towards digital pins side</span>
+<span class="linenos">12</span><span class="cm">  - RIGHT: from digital pins side towards analog pins side</span>
+<span class="linenos">13</span>
+<span class="linenos">14</span><span class="cm">  The circuit:</span>
+<span class="linenos">15</span><span class="cm">  - Arduino Nano 33 BLE Sense</span>
+<span class="linenos">16</span>
+<span class="linenos">17</span><span class="cm">  This example code is in the public domain.</span>
+<span class="linenos">18</span><span class="cm">*/</span>
+<span class="linenos">19</span>
+<span class="linenos">20</span><span class="cp">#include</span> <span class="cpf">&lt;Arduino_APDS9960.h&gt;</span><span class="cp"></span>
+<span class="linenos">21</span>
+<span class="linenos">22</span><span class="kt">void</span> <span class="nf">setup</span><span class="p">()</span> <span class="p">{</span>
+<span class="linenos">23</span>  <span class="n">Serial</span><span class="p">.</span><span class="n">begin</span><span class="p">(</span><span class="mi">115200</span><span class="p">);</span>
+<span class="linenos">24</span>  <span class="k">while</span> <span class="p">(</span><span class="o">!</span><span class="n">Serial</span><span class="p">);</span>
+<span class="linenos">25</span>
+<span class="linenos">26</span>  <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="n">APDS</span><span class="p">.</span><span class="n">begin</span><span class="p">())</span> <span class="p">{</span>
+<span class="linenos">27</span>    <span class="n">Serial</span><span class="p">.</span><span class="n">println</span><span class="p">(</span><span class="s">&quot;Error initializing APDS-9960 sensor!&quot;</span><span class="p">);</span>
+<span class="linenos">28</span>  <span class="p">}</span>
+<span class="linenos">29</span>
+<span class="linenos">30</span>  <span class="c1">// for setGestureSensitivity(..) a value between 1 and 100 is required.</span>
+<span class="linenos">31</span>  <span class="c1">// Higher values make the gesture recognition more sensitive but less accurate</span>
+<span class="linenos">32</span>  <span class="c1">// (a wrong gesture may be detected). Lower values makes the gesture recognition</span>
+<span class="linenos">33</span>  <span class="c1">// more accurate but less sensitive (some gestures may be missed).</span>
+<span class="linenos">34</span>  <span class="c1">// Default is 80</span>
+<span class="linenos">35</span>  <span class="c1">//APDS.setGestureSensitivity(80);</span>
+<span class="linenos">36</span>
+<span class="linenos">37</span>  <span class="n">Serial</span><span class="p">.</span><span class="n">println</span><span class="p">(</span><span class="s">&quot;Detecting gestures ...&quot;</span><span class="p">);</span>
+<span class="linenos">38</span><span class="p">}</span>
+<span class="linenos">39</span><span class="kt">void</span> <span class="nf">loop</span><span class="p">()</span> <span class="p">{</span>
+<span class="linenos">40</span>  <span class="k">if</span> <span class="p">(</span><span class="n">APDS</span><span class="p">.</span><span class="n">gestureAvailable</span><span class="p">())</span> <span class="p">{</span>
+<span class="linenos">41</span>    <span class="c1">// a gesture was detected, read and print to Serial Monitor</span>
+<span class="linenos">42</span>    <span class="kt">int</span> <span class="n">gesture</span> <span class="o">=</span> <span class="n">APDS</span><span class="p">.</span><span class="n">readGesture</span><span class="p">();</span>
+<span class="linenos">43</span>  
+<span class="linenos">44</span>    <span class="k">switch</span> <span class="p">(</span><span class="n">gesture</span><span class="p">)</span> <span class="p">{</span>
+<span class="linenos">45</span>      <span class="k">case</span> <span class="nl">GESTURE_UP</span><span class="p">:</span>
+<span class="linenos">46</span>        <span class="n">Serial</span><span class="p">.</span><span class="n">println</span><span class="p">(</span><span class="s">&quot;↑ Detected UP gesture&quot;</span><span class="p">);</span>
+<span class="linenos">47</span>        <span class="k">break</span><span class="p">;</span>
+<span class="linenos">48</span>
+<span class="linenos">49</span>      <span class="k">case</span> <span class="nl">GESTURE_DOWN</span><span class="p">:</span>
+<span class="linenos">50</span>        <span class="n">Serial</span><span class="p">.</span><span class="n">println</span><span class="p">(</span><span class="s">&quot;↓ Detected DOWN gesture&quot;</span><span class="p">);</span>
+<span class="linenos">51</span>        <span class="k">break</span><span class="p">;</span>
+<span class="linenos">52</span>
+<span class="linenos">53</span>      <span class="k">case</span> <span class="nl">GESTURE_LEFT</span><span class="p">:</span>
+<span class="linenos">54</span>        <span class="n">Serial</span><span class="p">.</span><span class="n">println</span><span class="p">(</span><span class="s">&quot;← Detected LEFT gesture&quot;</span><span class="p">);</span>
+<span class="linenos">55</span>        <span class="k">break</span><span class="p">;</span>
+<span class="linenos">56</span>
+<span class="linenos">57</span>      <span class="k">case</span> <span class="nl">GESTURE_RIGHT</span><span class="p">:</span>
+<span class="linenos">58</span>        <span class="n">Serial</span><span class="p">.</span><span class="n">println</span><span class="p">(</span><span class="s">&quot;→ Detected RIGHT gesture&quot;</span><span class="p">);</span>
+<span class="linenos">59</span>        <span class="k">break</span><span class="p">;</span>
+<span class="linenos">60</span>
+<span class="linenos">61</span>      <span class="k">default</span><span class="o">:</span>
+<span class="linenos">62</span>        <span class="c1">// ignore</span>
+<span class="linenos">63</span>        <span class="k">break</span><span class="p">;</span>
+<span class="linenos">64</span>    <span class="p">}</span>
+<span class="linenos">65</span>  <span class="p">}</span>
+<span class="linenos">66</span><span class="p">}</span>
+</pre></div>
+</div>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="页脚">
+        <a href="../petoi_guide/introduce.html" class="btn btn-neutral float-left" title="1 Petoi相关资料" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> 上一页</a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; 版权所有 2023, ASTC.</p>
+  </div>
+
+  利用 <a href="https://www.sphinx-doc.org/">Sphinx</a> 构建，使用的 
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">主题</a>
+    由 <a href="https://readthedocs.org">Read the Docs</a> 开发.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>
