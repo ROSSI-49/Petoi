@@ -238,3 +238,30 @@ Arduino采用USART通信模式，可以有硬串口，软串口两种实现方�
 
 1.4 Petoi程序设计（OpenCat）框架（搬运，施工中）
 ==================================================
+
+1.4.1 了解OpenCat的文件结构
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+1.4.2 了解OpenCat的控制方式：token与cmd
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Opencat提供了多种token来完成不同的动作，比如执行动作，蜂鸣器，重启等等，相关的代码都在 ``OpenCat.h`` 中被声明如下：
+
+.. code-block:: c
+   :linenos: 
+
+    #define T_ABORT       'a'
+    #define T_BEEP        'b'
+    #define T_CALIBRATE   'c'
+    #define T_REST        'd'
+    #define T_GYRO        'g'
+    #define T_HELP        'h'
+    #define T_INDEXED_SIMULTANEOUS_ASC 'i'
+    #define T_JOINTS      'j'
+    #define T_SKILL       'k'
+    #define T_MOVE_ASC    'm'
+    #define T_MELODY      'o'
+    #define T_PAUSE       'p'
+    #define T_RAMP        'r'
+    #define T_SAVE        's'
+    #define T_TILT        't'
+    #define T_MEOW        'u'

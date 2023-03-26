@@ -198,8 +198,7 @@ duration: 发声时长（单位：微秒，此参数为可选参数) – 无符�
 
 Bittle的动作数据通过数组的形式储存在文件InstinctBittle.h中，通过cmd＋token的方式来实现调用。接下来让我们来看一下数组中的每个变量的具体含义，示例代码如下：
 
-.. code-block:: c
-   :linenos: 
+
    const int8_t balance[] PROGMEM = { 
    1, 0, 0, 1,
       0,   0,   0,   0,   0,   0,   0,   0,  30,  30,  30,  30,  30,  30,  30,  30,};
@@ -230,4 +229,23 @@ Bittle的动作数据通过数组的形式储存在文件InstinctBittle.h中，�
 
 首先是如何实际一个自己想要的动作组，这里推荐的是使用桌面程序导出的方式，这样能够近似于可视化的实现设计，官方文档已经给出了操作方法，请查阅： https://docs.petoi.com/v/chinese/zhuo-mian-ying-yong/ji-neng-chuang-zuo-fang
 
-如何将设计好的动作写入程序，首先需要了解Opencat对于动作的分类，Opencat框架为了
+如何将设计好的动作写入程序，首先需要了解Opencat对于动作的分类，Opencat框架为了节省有限的存储空间，将动作分为两类：本能和技能；I2C EEPROM (8KB) 存储本能，而Flash (与Arduino程序代码分享32KB存储空间) 存储技能。每个技能数组名称加了一个后缀，“N”表示是新技，“I”表示是本能。一个代码的示例如下：
+
+
+
+     const char* skillNameWithType[]={"bdFI","bkI","bkLI","crFI","crLI","mhFI","mhLI","pcFI","phFI","phLI","trFI","trLI","vtFI","vtLI","wkFI","wkLI","balanceI","buttUpI","calibI","droppedI","liftedI","restI","sitI","strI","zeroN","bfI","ckI","climbCeilI","fdI","hiI","jyI","pdI","peeI","puI","rcI","rtI","stpI","testServoI",};
+   #if !defined(MAIN_SKETCH) || !defined(I2C_EEPROM)
+         //if it's not the main sketch to save data or there's no external EEPROM, 
+         //the list should always contain all information.
+      const int8_t* progmemPointer[] = {bdF, bk, bkL, crF, crL, mhF, mhL, pcF, phF, phL, trF, trL, vtF, vtL, wkF, wkL, balance, buttUp, calib, dropped, lifted, rest, sit, str, zero, bf, ck, climbCeil, fd, hi, jy, pd, pee, pu, rc, rt, stp, testServo, };
+   #else	//only need to know the pointers to newbilities, because the intuitions have been saved onto external EEPROM,
+         //while the newbilities on progmem are assigned to new addresses
+      const int8_t* progmemPointer[] = {zero, };
+
+``skillNameWithType`` 中，储存了所有补全后缀的动作的名称，添加新动作的时候，请根据种类将其添加到该列表中；下面的 ``#if`` 中的语句主要用于上传配置程序时读取， ``else`` 中的语句则用于上传主程序的时候重新读取对应的动作组。这个比喻是很形象的，就像本能是先天就会(配置在主板EEPROM上，掉电不会消失)的，而新技能是要重新学习的，可以改变的(存储在Flash中，每次烧写主程序的时候都会改变)本能和技能的区别体现在程序上是，在完成主板配置之后，只烧录主程序，则职能修改其技能，而对于本能的修改不会生效。
+
+那么如何将一个动作添加到程序中呢？首先进行程序代码的修改，先把代表对应动作组的数组复制到 ``InstinctBittle.h`` 中，如果想添加一个技能，就要在上述的三个列表中，都增加对应的一项；如果想要添加一个本能，则需要在前两个项目中添加对应的项。之后需要进行配置文件的烧写，注意：不是主程序文件，烧写方法参考 `配置方法 <https://docs.petoi.com/v/chinese/arduino-ide/wei-nyboard-shang-chuan-cheng-xu#shang-chuan-cheng-xu-gu-jian>`_ 之后在进行主程序代码的烧写即可。
+
+如果想对现有的动作进行修改，且修改的是技能，则直接在 ``InstinctBittle.h`` 中进行修改后重新烧写主程序即可，若是对本能进行修改，则需要进行配置文件的烧写。
+
+最后，如何控制其做出相关动作呢？Petoi采用的是token和cmd的方式，

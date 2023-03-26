@@ -20,7 +20,7 @@
     <script src="../../_static/js/theme.js"></script>
     <link rel="index" title="索引" href="../../genindex.html" />
     <link rel="search" title="搜索" href="../../search.html" />
-    <link rel="next" title="2 Petoi + Arduino开发例程" href="../Demos/demos.html" />
+    <link rel="next" title="2 Petoi + Arduino开发例程" href="../demos/demos.html" />
     <link rel="prev" title="Petoi机器狗入门(施工中)" href="../index.html" /> 
 </head>
 
@@ -57,10 +57,14 @@
 <li class="toctree-l4"><a class="reference internal" href="#id5">1.3.3 主要的库函数</a></li>
 </ul>
 </li>
-<li class="toctree-l3"><a class="reference internal" href="#petoi-opencat">1.4 Petoi程序设计（OpenCat）框架（搬运，施工中）</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#petoi-opencat">1.4 Petoi程序设计（OpenCat）框架（搬运，施工中）</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#opencat">1.4.1 了解OpenCat的文件结构</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#opencat-tokencmd">1.4.2 了解OpenCat的控制方式：token与cmd</a></li>
 </ul>
 </li>
-<li class="toctree-l2"><a class="reference internal" href="../Demos/demos.html">2 Petoi + Arduino开发例程</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../demos/demos.html">2 Petoi + Arduino开发例程</a></li>
 </ul>
 </li>
 </ul>
@@ -329,6 +333,31 @@ GPIO口一是个比较重要的概念，用户可以通过GPIO口和硬件进行
 </section>
 <section id="petoi-opencat">
 <h2>1.4 Petoi程序设计（OpenCat）框架（搬运，施工中）<a class="headerlink" href="#petoi-opencat" title="此标题的永久链接"></a></h2>
+<section id="opencat">
+<h3>1.4.1 了解OpenCat的文件结构<a class="headerlink" href="#opencat" title="此标题的永久链接"></a></h3>
+</section>
+<section id="opencat-tokencmd">
+<h3>1.4.2 了解OpenCat的控制方式：token与cmd<a class="headerlink" href="#opencat-tokencmd" title="此标题的永久链接"></a></h3>
+<p>Opencat提供了多种token来完成不同的动作，比如执行动作，蜂鸣器，重启等等，相关的代码都在 <code class="docutils literal notranslate"><span class="pre">OpenCat.h</span></code> 中被声明如下：</p>
+<div class="highlight-c notranslate"><div class="highlight"><pre><span></span><span class="linenos"> 1</span> <span class="cp">#define T_ABORT       &#39;a&#39;</span>
+<span class="linenos"> 2</span> <span class="cp">#define T_BEEP        &#39;b&#39;</span>
+<span class="linenos"> 3</span> <span class="cp">#define T_CALIBRATE   &#39;c&#39;</span>
+<span class="linenos"> 4</span> <span class="cp">#define T_REST        &#39;d&#39;</span>
+<span class="linenos"> 5</span> <span class="cp">#define T_GYRO        &#39;g&#39;</span>
+<span class="linenos"> 6</span> <span class="cp">#define T_HELP        &#39;h&#39;</span>
+<span class="linenos"> 7</span> <span class="cp">#define T_INDEXED_SIMULTANEOUS_ASC &#39;i&#39;</span>
+<span class="linenos"> 8</span> <span class="cp">#define T_JOINTS      &#39;j&#39;</span>
+<span class="linenos"> 9</span> <span class="cp">#define T_SKILL       &#39;k&#39;</span>
+<span class="linenos">10</span> <span class="cp">#define T_MOVE_ASC    &#39;m&#39;</span>
+<span class="linenos">11</span> <span class="cp">#define T_MELODY      &#39;o&#39;</span>
+<span class="linenos">12</span> <span class="cp">#define T_PAUSE       &#39;p&#39;</span>
+<span class="linenos">13</span> <span class="cp">#define T_RAMP        &#39;r&#39;</span>
+<span class="linenos">14</span> <span class="cp">#define T_SAVE        &#39;s&#39;</span>
+<span class="linenos">15</span> <span class="cp">#define T_TILT        &#39;t&#39;</span>
+<span class="linenos">16</span> <span class="cp">#define T_MEOW        &#39;u&#39;</span>
+</pre></div>
+</div>
+</section>
 </section>
 </section>
 
@@ -337,7 +366,7 @@ GPIO口一是个比较重要的概念，用户可以通过GPIO口和硬件进行
           </div>
           <footer><div class="rst-footer-buttons" role="navigation" aria-label="页脚">
         <a href="../index.html" class="btn btn-neutral float-left" title="Petoi机器狗入门(施工中)" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> 上一页</a>
-        <a href="../Demos/demos.html" class="btn btn-neutral float-right" title="2 Petoi + Arduino开发例程" accesskey="n" rel="next">下一页 <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+        <a href="../demos/demos.html" class="btn btn-neutral float-right" title="2 Petoi + Arduino开发例程" accesskey="n" rel="next">下一页 <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
     </div>
 
   <hr/>
