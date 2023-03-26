@@ -179,7 +179,6 @@ Bittle的动作数据通过数组的形式储存在文件InstinctBittle.h中，�
 
 .. code-block:: c
    :linenos:
-
    const int8_t balance[] PROGMEM = { 
    1, 0, 0, 1,
       0,   0,   0,   0,   0,   0,   0,   0,  30,  30,  30,  30,  30,  30,  30,  30,};
