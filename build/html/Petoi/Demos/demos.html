@@ -57,6 +57,7 @@
 <li class="toctree-l3"><a class="reference internal" href="#id4">1.6 蜂鸣器</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#id5">1.7 光传感器</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#id6">1.8 手势传感器</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#id7">1.9 动作组详解</a></li>
 </ul>
 </li>
 </ul>
@@ -324,6 +325,37 @@
 </pre></div>
 </div>
 <p>两个光传感器的实例，可以实现对光源的左右位置判断</p>
+<div class="highlight-c notranslate" id="doublelight-ino"><div class="highlight"><pre><span></span><span class="linenos"> 1</span><span class="cp">#define IR_PIN    4   </span><span class="c1">// Signal Pin of IR receiver to Arduino Digital Pin 4</span>
+<span class="linenos"> 2</span><span class="cp">#define BUZZER    5</span>
+<span class="linenos"> 3</span>
+<span class="linenos"> 4</span><span class="c1">//Consistency and shifts</span>
+<span class="linenos"> 5</span><span class="c1">//Source of error</span>
+<span class="linenos"> 6</span><span class="c1">//Calibration</span>
+<span class="linenos"> 7</span><span class="c1">//Comparison</span>
+<span class="linenos"> 8</span>
+<span class="linenos"> 9</span><span class="kt">void</span> <span class="nf">setup</span><span class="p">()</span> <span class="p">{</span>
+<span class="linenos">10</span>  <span class="c1">// put your setup code here, to run once:</span>
+<span class="linenos">11</span>  <span class="n">Serial</span><span class="p">.</span><span class="n">begin</span><span class="p">(</span><span class="mi">115200</span><span class="p">);</span>
+<span class="linenos">12</span>  <span class="n">Serial</span><span class="p">.</span><span class="n">setTimeout</span><span class="p">(</span><span class="mi">2</span><span class="p">);</span>
+<span class="linenos">13</span><span class="p">}</span>
+<span class="linenos">14</span>
+<span class="linenos">15</span><span class="kt">void</span> <span class="nf">loop</span><span class="p">()</span> <span class="p">{</span>
+<span class="linenos">16</span>  <span class="c1">// put your main code here, to run repeatedly:</span>
+<span class="linenos">17</span>
+<span class="linenos">18</span>  <span class="n">Serial</span><span class="p">.</span><span class="n">print</span><span class="p">(</span><span class="n">analogRead</span><span class="p">(</span><span class="n">A2</span><span class="p">));</span>
+<span class="linenos">19</span>  <span class="n">Serial</span><span class="p">.</span><span class="n">print</span><span class="p">(</span><span class="sc">&#39;\t&#39;</span><span class="p">);</span>
+<span class="linenos">20</span>  <span class="n">Serial</span><span class="p">.</span><span class="n">print</span><span class="p">(</span><span class="n">analogRead</span><span class="p">(</span><span class="n">A3</span><span class="p">));</span>
+<span class="linenos">21</span>
+<span class="linenos">22</span>  <span class="n">Serial</span><span class="p">.</span><span class="n">print</span><span class="p">(</span><span class="sc">&#39;\t&#39;</span><span class="p">);</span>
+<span class="linenos">23</span>  <span class="n">Serial</span><span class="p">.</span><span class="n">print</span><span class="p">(</span><span class="mi">0</span><span class="p">);</span>
+<span class="linenos">24</span>  <span class="n">Serial</span><span class="p">.</span><span class="n">print</span><span class="p">(</span><span class="sc">&#39;\t&#39;</span><span class="p">);</span>
+<span class="linenos">25</span>  <span class="n">Serial</span><span class="p">.</span><span class="n">print</span><span class="p">(</span><span class="mi">1024</span><span class="p">);</span>
+<span class="linenos">26</span>
+<span class="linenos">27</span>  <span class="n">Serial</span><span class="p">.</span><span class="n">println</span><span class="p">();</span>
+<span class="linenos">28</span>  <span class="n">delay</span><span class="p">(</span><span class="mi">2</span><span class="p">);</span>
+<span class="linenos">29</span><span class="p">}</span>
+</pre></div>
+</div>
 </section>
 <section id="id6">
 <h2>1.8 手势传感器<a class="headerlink" href="#id6" title="此标题的永久链接"></a></h2>
@@ -395,6 +427,20 @@
 <span class="linenos">66</span><span class="p">}</span>
 </pre></div>
 </div>
+</section>
+<section id="id7">
+<h2>1.9 动作组详解<a class="headerlink" href="#id7" title="此标题的永久链接"></a></h2>
+<p>Bittle的动作数据通过数组的形式储存在文件InstinctBittle.h中，通过cmd＋token的方式来实现调用。接下来让我们来看一下数组中的每个变量的具体含义，示例代码如下：</p>
+<p>首先是第一个数，此处为1，这个数的主要作用有两个，给出动作执行的帧以及动作执行的种类，Opencat设计了三种动作分类：</p>
+<ul class="simple">
+<li><p><strong>行为</strong>:这个数为负数的时候表示为一个行为，一般可以包含多帧，负几就是几帧，行为的特点是一般单次调用只被执行一次，就会还原</p></li>
+<li><p><strong>步态</strong>:第一个数为＞1的正数，一个不太可以包含多帧，实际调用时，每次调用都会循环执行这个动作，直到停止</p></li>
+<li><p><strong>姿势</strong>:第一个数为1，只包含一个动作帧</p></li>
+</ul>
+<p>数组中第 2 个元素和第 3 个元素表示身体方向期望值（对应身体的横滚角和俯仰角），单位是度。如果开启了陀螺仪mpu6050，则机器狗会在不稳定的时候，尽可能保持该身体的俯仰角。</p>
+<p>这三个是较为常用的改动位置，其余的数据只要了解即可，实际使用的时候，通过桌面程序生成要方便的多。</p>
+<p>技能数组中第4个元素表示角度比率。由于数据结构的限制，数字中的每一位的储存空间为-127~127，当需要存储超出 -128 到 127 范围内的角度值时，可以增大角度比率值。比如将角度比率设置为 2，技能数组中所有关节舵机的角度值乘以2才是舵机的实际旋转角度。</p>
+<p>之后的一行数据表示了一个帧内，机器狗的相关动作，实际上也就是机器狗各个舵机的角度，具体的角度换算，已经在官方文档中给出，请参阅： <a class="reference external" href="https://docs.petoi.com/v/chinese/ying-yong-shi-li/ji-neng-chuang-zuo#duo-ji-xu-hao-ji-qi-jiao-du-zhi-indexed-joint-angles">https://docs.petoi.com/v/chinese/ying-yong-shi-li/ji-neng-chuang-zuo#duo-ji-xu-hao-ji-qi-jiao-du-zhi-indexed-joint-angles</a></p>
 </section>
 </section>
 
