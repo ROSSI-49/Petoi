@@ -51,14 +51,14 @@
 <li class="toctree-l2 current"><a class="current reference internal" href="#">2 Petoi + Arduino开发例程</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="#opencat">1.0 准备工作——烧写Opencat框架</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#arduino-helloworld">1.1 第一个Arduino程序：helloWorld：</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#id1">1.2 学会说话：串口通讯与串口监视器</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#id2">1.3 模拟信号的读取</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#id3">1.4 数字信号的读取（施工中）</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#id2">1.2 学会说话：串口通讯与串口监视器</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#id3">1.3 模拟信号的读取</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#id4">1.4 数字信号的读取（施工中）</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#pwm">1.5 输出PWM信号</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#id4">1.6 蜂鸣器</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#id5">1.7 光传感器</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#id6">1.8 手势传感器</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#id7">1.9 动作组详解</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#id5">1.6 蜂鸣器</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#id6">1.7 光传感器</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#id7">1.8 手势传感器</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#id8">1.9 动作组详解</a></li>
 </ul>
 </li>
 </ul>
@@ -95,12 +95,16 @@
 <section id="opencat">
 <h2>1.0 准备工作——烧写Opencat框架<a class="headerlink" href="#opencat" title="此标题的永久链接"></a></h2>
 <p>下述例程中，有以下的几个例程需要在Opencat框架下进行开发：</p>
-<p>通过token+cmd的方式对机器人实现代码控制</p>
-<p>动作组详解（Petoi的方法调用和设计动作组）</p>
-<p>实现光线跟随</p>
-<p>根据手势完成动作组</p>
-<p>写一个自己的蓝牙遥控器</p>
-<p>超声波实现跟随</p>
+<ul class="simple">
+<li><p>通过token+cmd的方式对机器人实现代码控制</p></li>
+<li><p>动作组详解（Petoi的方法调用和设计动作组）</p></li>
+<li><p>实现光线跟随</p></li>
+<li><p>根据手势完成动作组</p></li>
+<li><p>写一个自己的蓝牙遥控器</p></li>
+<li><p>超声波实现跟随</p></li>
+</ul>
+<p>这些代码请在Opencat框架下进行修改，Opencat的烧录请参阅： <a class="reference external" href="https://docs.petoi.com/v/chinese/arduino-ide/wei-nyboard-shang-chuan-cheng-xu#xia-zai-opencat-ruan-jian-bao">https://docs.petoi.com/v/chinese/arduino-ide/wei-nyboard-shang-chuan-cheng-xu#xia-zai-opencat-ruan-jian-bao</a></p>
+<p>关于代码包中的文件框架解读请参阅： <a class="reference external" href="https://petoi-temp.readthedocs.io/en/latest/Petoi/petoi_guide/introduce.html#petoi-opencat">OpenCat程序框架</a></p>
 </section>
 <section id="arduino-helloworld">
 <h2>1.1 第一个Arduino程序：helloWorld：<a class="headerlink" href="#arduino-helloworld" title="此标题的永久链接"></a></h2>
@@ -119,8 +123,8 @@
 </pre></div>
 </div>
 </section>
-<section id="id1">
-<h2>1.2 学会说话：串口通讯与串口监视器<a class="headerlink" href="#id1" title="此标题的永久链接"></a></h2>
+<section id="id2">
+<h2>1.2 学会说话：串口通讯与串口监视器<a class="headerlink" href="#id2" title="此标题的永久链接"></a></h2>
 <p>在前文中，我们已经简单的介绍了Arduino函数对于串口的使用，但ArduinoIDE的串口监视器还有一些设置的细节和应用。串行通讯的实质是协议，收发方按照一定的规则对数据进行编码，发送，接受，解码，从而实现串口的通讯。如果你想更深入的了解Arduino的串口数据形式，协议内容，硬件设计。请参阅： <a class="reference external" href="https://www.w3cschool.cn/arduino/arduino_communication.html">https://www.w3cschool.cn/arduino/arduino_communication.html</a> 和官方文档</p>
 <ul class="simple">
 <li><p><strong>串口绘图器的使用</strong></p></li>
@@ -137,8 +141,8 @@
 <p>最终可以得到三条直线。</p>
 <p>在实际的输出中，常常是一个大小不断变化的数值，串口绘图器会根据这些数据自动调整量程，从而来回跳变，为了避免这种变化，可以输入一个很大的常数，绘制直线来限制量程的变化</p>
 </section>
-<section id="id2">
-<h2>1.3 模拟信号的读取<a class="headerlink" href="#id2" title="此标题的永久链接"></a></h2>
+<section id="id3">
+<h2>1.3 模拟信号的读取<a class="headerlink" href="#id3" title="此标题的永久链接"></a></h2>
 <p>本例程为模拟信号输入的一个简单例程，也是多种传感器使用的基础。代码如下：</p>
 <div class="highlight-c notranslate" id="analogread-c"><div class="highlight"><pre><span></span><span class="linenos"> 1</span><span class="cp">#define IR_PIN    4   </span><span class="c1">// Signal Pin of IR receiver to Arduino Digital Pin 4</span>
 <span class="linenos"> 2</span><span class="cp">#define BUZZER    5</span>
@@ -168,8 +172,8 @@
 </div>
 <p>Arduino的模拟输入的范围为0~1024，即使不接入传感器，我们同样也可以对模拟接口人为的进行干扰(晃一晃，按一按啥的),就能看到数值的变化。该模块的输出同样可以使用串口绘图器及逆行观察。</p>
 </section>
-<section id="id3">
-<h2>1.4 数字信号的读取（施工中）<a class="headerlink" href="#id3" title="此标题的永久链接"></a></h2>
+<section id="id4">
+<h2>1.4 数字信号的读取（施工中）<a class="headerlink" href="#id4" title="此标题的永久链接"></a></h2>
 </section>
 <section id="pwm">
 <h2>1.5 输出PWM信号<a class="headerlink" href="#pwm" title="此标题的永久链接"></a></h2>
@@ -223,8 +227,8 @@
 <p>OCR2A/B：这是计时器中的两个比较寄存器，OCR2A控制pin11的占空比，OCR2B控制pin3的占空比。计时器中还有一个0~255的计数器。每过一个时钟周期，这个计数器的数目就+1，当数目达到255后就自动清零。这个比较寄存器的实际作用是当计数器的数比其小的时候，输出为高电平，比其高的时候输出为低电平。</p>
 <p>显然，经过0~255的过程才是完成了一个PWM的周期，所以实际的PWM输出就是 16 MHz / 1024 / 64</p>
 </section>
-<section id="id4">
-<h2>1.6 蜂鸣器<a class="headerlink" href="#id4" title="此标题的永久链接"></a></h2>
+<section id="id5">
+<h2>1.6 蜂鸣器<a class="headerlink" href="#id5" title="此标题的永久链接"></a></h2>
 <ul class="simple">
 <li><p>tone()</p></li>
 </ul>
@@ -385,8 +389,8 @@
 </pre></div>
 </div>
 </section>
-<section id="id5">
-<h2>1.7 光传感器<a class="headerlink" href="#id5" title="此标题的永久链接"></a></h2>
+<section id="id6">
+<h2>1.7 光传感器<a class="headerlink" href="#id6" title="此标题的永久链接"></a></h2>
 <p>单个光传感器的实例</p>
 <div class="highlight-c notranslate" id="singlelight-ino"><div class="highlight"><pre><span></span><span class="linenos"> 1</span><span class="cp">#define IR_PIN    4   </span><span class="c1">// Signal Pin of IR receiver to Arduino Digital Pin 4</span>
 <span class="linenos"> 2</span><span class="cp">#define BUZZER    5</span>
@@ -463,8 +467,8 @@
 </pre></div>
 </div>
 </section>
-<section id="id6">
-<h2>1.8 手势传感器<a class="headerlink" href="#id6" title="此标题的永久链接"></a></h2>
+<section id="id7">
+<h2>1.8 手势传感器<a class="headerlink" href="#id7" title="此标题的永久链接"></a></h2>
 <div class="highlight-c notranslate" id="gesture-ino"><div class="highlight"><pre><span></span><span class="linenos"> 1</span><span class="cm">/*</span>
 <span class="linenos"> 2</span><span class="cm">  APDS-9960 - Gesture Sensor</span>
 <span class="linenos"> 3</span><span class="cm">  https://www.arduino.cc/reference/en/libraries/arduino_apds9960/</span>
@@ -534,9 +538,14 @@
 </pre></div>
 </div>
 </section>
-<section id="id7">
-<h2>1.9 动作组详解<a class="headerlink" href="#id7" title="此标题的永久链接"></a></h2>
+<section id="id8">
+<h2>1.9 动作组详解<a class="headerlink" href="#id8" title="此标题的永久链接"></a></h2>
 <p>Bittle的动作数据通过数组的形式储存在文件InstinctBittle.h中，通过cmd＋token的方式来实现调用。接下来让我们来看一下数组中的每个变量的具体含义，示例代码如下：</p>
+<div class="highlight-c notranslate"><div class="highlight"><pre><span></span><span class="linenos">1</span><span class="k">const</span> <span class="kt">int8_t</span> <span class="n">balance</span><span class="p">[]</span> <span class="n">PROGMEM</span> <span class="o">=</span> <span class="p">{</span>
+<span class="linenos">2</span><span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span>
+<span class="linenos">3</span>   <span class="mi">0</span><span class="p">,</span>   <span class="mi">0</span><span class="p">,</span>   <span class="mi">0</span><span class="p">,</span>   <span class="mi">0</span><span class="p">,</span>   <span class="mi">0</span><span class="p">,</span>   <span class="mi">0</span><span class="p">,</span>   <span class="mi">0</span><span class="p">,</span>   <span class="mi">0</span><span class="p">,</span>  <span class="mi">30</span><span class="p">,</span>  <span class="mi">30</span><span class="p">,</span>  <span class="mi">30</span><span class="p">,</span>  <span class="mi">30</span><span class="p">,</span>  <span class="mi">30</span><span class="p">,</span>  <span class="mi">30</span><span class="p">,</span>  <span class="mi">30</span><span class="p">,</span>  <span class="mi">30</span><span class="p">,};</span>
+</pre></div>
+</div>
 <p>首先是第一个数，此处为1，这个数的主要作用有两个，给出动作执行的帧以及动作执行的种类，Opencat设计了三种动作分类：</p>
 <ul class="simple">
 <li><p><strong>行为</strong>:这个数为负数的时候表示为一个行为，一般可以包含多帧，负几就是几帧，行为的特点是一般单次调用只被执行一次，就会还原</p></li>

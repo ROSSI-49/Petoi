@@ -7,17 +7,21 @@
 
 下述例程中，有以下的几个例程需要在Opencat框架下进行开发：
 
-通过token+cmd的方式对机器人实现代码控制
++ 通过token+cmd的方式对机器人实现代码控制
 
-动作组详解（Petoi的方法调用和设计动作组）
++ 动作组详解（Petoi的方法调用和设计动作组）
 
-实现光线跟随
++ 实现光线跟随
 
-根据手势完成动作组
++ 根据手势完成动作组
 
-写一个自己的蓝牙遥控器
++ 写一个自己的蓝牙遥控器
 
-超声波实现跟随
++ 超声波实现跟随
+
+这些代码请在Opencat框架下进行修改，Opencat的烧录请参阅： https://docs.petoi.com/v/chinese/arduino-ide/wei-nyboard-shang-chuan-cheng-xu#xia-zai-opencat-ruan-jian-bao
+
+关于代码包中的文件框架解读请参阅： `OpenCat程序框架 <https://petoi-temp.readthedocs.io/en/latest/Petoi/petoi_guide/introduce.html#petoi-opencat>`_
 
 1.1 第一个Arduino程序：helloWorld：
 ==================================================
@@ -196,6 +200,7 @@ Bittle的动作数据通过数组的形式储存在文件InstinctBittle.h中，�
 
 .. code-block:: c
    :linenos:
+   
    const int8_t balance[] PROGMEM = { 
    1, 0, 0, 1,
       0,   0,   0,   0,   0,   0,   0,   0,  30,  30,  30,  30,  30,  30,  30,  30,};
