@@ -221,7 +221,7 @@ GPIO口一是个比较重要的概念，用户可以通过GPIO口和硬件进行
 <p>请参阅： <a class="reference external" href="https://www.w3cschool.cn/arduino/arduino_math_library.html">https://www.w3cschool.cn/arduino/arduino_math_library.html</a></p>
 </section>
 <section id="id10">
-<h4>1.3.3.3 串口通讯（<strong>*</strong>）<a class="headerlink" href="#id10" title="此标题的永久链接"></a></h4>
+<h4>1.3.3.3 串口通讯（*）<a class="headerlink" href="#id10" title="此标题的永久链接"></a></h4>
 <p>Arduino采用USART通信模式，可以有硬串口，软串口两种实现方式。前者为硬件串口，也就是板子上的RX和TX，后者为软件模拟生成的串口</p>
 <ul class="simple">
 <li><p><strong>硬串口</strong></p></li>
@@ -326,7 +326,7 @@ GPIO口一是个比较重要的概念，用户可以通过GPIO口和硬件进行
 // 此函数为毫秒级延时。参数为时长，类型unsigned long</p>
 <p><code class="docutils literal notranslate"><span class="pre">delayMicroseconds(us)</span></code>
 // 此函数为微秒级延时。参数为时长,类型unsigned int</p>
-<p>常用的库函数还包括 <a href="#id16"><span class="problematic" id="id17">``</span></a>wire(I2C)``类， <a href="#id18"><span class="problematic" id="id19">``</span></a>SPI``类等，如需了解请查阅 <a class="reference external" href="https://wiki.arduino.cn/?file=home">https://wiki.arduino.cn/?file=home</a>-首页</p>
+<p>常用的库函数还包括 <code class="docutils literal notranslate"><span class="pre">wire(I2C)</span></code> 类， <code class="docutils literal notranslate"><span class="pre">SPI</span></code> 类等，如需了解请查阅 <a class="reference external" href="https://wiki.arduino.cn/?file=home">https://wiki.arduino.cn/?file=home</a>-首页</p>
 <p><strong>了解了以上的函数，再随时查阅相关文档，就能够进行简单的Petoi开发了。下一节介绍了Petoi的库OpenCat的代码结构，暂时不需要进行了解，可先查看后续例程</strong></p>
 </section>
 </section>
@@ -335,6 +335,29 @@ GPIO口一是个比较重要的概念，用户可以通过GPIO口和硬件进行
 <h2>1.4 Petoi程序设计（OpenCat）框架（搬运，施工中）<a class="headerlink" href="#petoi-opencat" title="此标题的永久链接"></a></h2>
 <section id="opencat">
 <h3>1.4.1 了解OpenCat的文件结构<a class="headerlink" href="#opencat" title="此标题的永久链接"></a></h3>
+<p>机器狗所采用的框架OpenCat的框架文件夹的结构如下，主要使用的目录已经加粗：</p>
+<ul class="simple">
+<li><dl class="simple">
+<dt>OpenCat</dt><dd><ul>
+<li><p>ModuleTests           //这个文件夹存放了用来测试主板各个功能的程序</p></li>
+<li><p>pyUI                  //这个文件夹是可视化桌面程序的py源码，这部分代码基本不用修改</p></li>
+<li><dl class="simple">
+<dt>Resources             //这个文件夹放置了一些关于方针和开发板的资源</dt><dd><ul>
+<li><p>Nyboard           //开发板的bootloader引导程序，以及资源定义，可以更改电路板定义等，用不到</p></li>
+<li><p>SimulationModels  //用来在电脑上对其进行模拟仿真，参考(完蛋，参考找不见了)</p></li>
+</ul>
+</dd>
+</dl>
+</li>
+<li><p>SkillLibrary          //存放了经过官方实验的一些动作组，需要的话可以进去抄</p></li>
+<li><p>Seiralmaster          //通过串口控制的相关代码和一些示例脚本</p></li>
+<li><p><strong>src</strong>               //存放源码的文件夹，进行修改的主要文件都在里面，里面的文件基本上可说是字如其名</p></li>
+<li><p><strong>OpenCat.ino</strong>       //主程序代码，OpenCat的基本程序框架，改代码的主要地方</p></li>
+</ul>
+</dd>
+</dl>
+</li>
+</ul>
 </section>
 <section id="opencat-tokencmd">
 <h3>1.4.2 了解OpenCat的控制方式：token与cmd<a class="headerlink" href="#opencat-tokencmd" title="此标题的永久链接"></a></h3>
