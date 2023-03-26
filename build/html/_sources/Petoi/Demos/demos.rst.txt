@@ -142,7 +142,7 @@ duration: 发声时长（单位：微秒，此参数为可选参数) – 无符�
 
 为了实现该程序，还需要使用头文件对声调和对应PWM进行如下的声明
 
-.. literalinclude:: toneMelodypitches.h
+.. literalinclude:: toneMelody/pitches.h
    :language: c
    :linenos:
    :name: pitches.h
@@ -176,6 +176,13 @@ duration: 发声时长（单位：微秒，此参数为可选参数) – 无符�
 ==================================================
 
 Bittle的动作数据通过数组的形式储存在文件InstinctBittle.h中，通过cmd＋token的方式来实现调用。接下来让我们来看一下数组中的每个变量的具体含义，示例代码如下：
+
+.. code-block:: c
+   :linenos:
+
+   const int8_t balance[] PROGMEM = { 
+   1, 0, 0, 1,
+      0,   0,   0,   0,   0,   0,   0,   0,  30,  30,  30,  30,  30,  30,  30,  30,};
 
 首先是第一个数，此处为1，这个数的主要作用有两个，给出动作执行的帧以及动作执行的种类，Opencat设计了三种动作分类：
 
