@@ -49,6 +49,7 @@
 <li class="toctree-l1 current"><a class="reference internal" href="../index.html">Petoi机器狗入门(施工中)</a><ul class="current">
 <li class="toctree-l2"><a class="reference internal" href="../petoi_guide/introduce.html">1 Petoi相关资料</a></li>
 <li class="toctree-l2 current"><a class="current reference internal" href="#">2 Petoi + Arduino开发例程</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#opencat">1.0 准备工作——烧写Opencat框架</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#arduino-helloworld">1.1 第一个Arduino程序：helloWorld：</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#id1">1.2 学会说话：串口通讯与串口监视器</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#id2">1.3 模拟信号的读取</a></li>
@@ -91,6 +92,16 @@
              
   <section id="petoi-arduino">
 <h1>2 Petoi + Arduino开发例程<a class="headerlink" href="#petoi-arduino" title="此标题的永久链接"></a></h1>
+<section id="opencat">
+<h2>1.0 准备工作——烧写Opencat框架<a class="headerlink" href="#opencat" title="此标题的永久链接"></a></h2>
+<p>下述例程中，有以下的几个例程需要在Opencat框架下进行开发：</p>
+<p>通过token+cmd的方式对机器人实现代码控制</p>
+<p>动作组详解（Petoi的方法调用和设计动作组）</p>
+<p>实现光线跟随</p>
+<p>根据手势完成动作组</p>
+<p>写一个自己的蓝牙遥控器</p>
+<p>超声波实现跟随</p>
+</section>
 <section id="arduino-helloworld">
 <h2>1.1 第一个Arduino程序：helloWorld：<a class="headerlink" href="#arduino-helloworld" title="此标题的永久链接"></a></h2>
 <p>本例程为串口的简单使用，链接烧录器到电脑，配置串口接收器，就能够收到来自于Petoi发出的“helloWorld”</p>
@@ -536,6 +547,14 @@
 <p>这三个是较为常用的改动位置，其余的数据只要了解即可，实际使用的时候，通过桌面程序生成要方便的多。</p>
 <p>技能数组中第4个元素表示角度比率。由于数据结构的限制，数字中的每一位的储存空间为-127~127，当需要存储超出 -128 到 127 范围内的角度值时，可以增大角度比率值。比如将角度比率设置为 2，技能数组中所有关节舵机的角度值乘以2才是舵机的实际旋转角度。</p>
 <p>之后的一行数据表示了一个帧内，机器狗的相关动作，实际上也就是机器狗各个舵机的角度，具体的角度换算，已经在官方文档中给出，请参阅： <a class="reference external" href="https://docs.petoi.com/v/chinese/ying-yong-shi-li/ji-neng-chuang-zuo#duo-ji-xu-hao-ji-qi-jiao-du-zhi-indexed-joint-angles">https://docs.petoi.com/v/chinese/ying-yong-shi-li/ji-neng-chuang-zuo#duo-ji-xu-hao-ji-qi-jiao-du-zhi-indexed-joint-angles</a></p>
+<p>了解了动作组的数据结构，我们来尝试设计实现一个动作组吧！让机器狗实现一个动作组，主要需要了解以下的问题：</p>
+<ul class="simple">
+<li><p>如何设计一个动作组</p></li>
+<li><p>如何将自己设计的动作组写入程序</p></li>
+<li><p>如何完成对于动作组的调用</p></li>
+</ul>
+<p>首先是如何实际一个自己想要的动作组，这里推荐的是使用桌面程序导出的方式，这样能够近似于可视化的实现设计，官方文档已经给出了操作方法，请查阅： <a class="reference external" href="https://docs.petoi.com/v/chinese/zhuo-mian-ying-yong/ji-neng-chuang-zuo-fang">https://docs.petoi.com/v/chinese/zhuo-mian-ying-yong/ji-neng-chuang-zuo-fang</a></p>
+<p>如何将设计好的动作写入程序，首先需要了解Opencat对于动作的分类，Opencat框架为了</p>
 </section>
 </section>
 
