@@ -21,7 +21,7 @@
 
 这些代码请在Opencat框架下进行修改，Opencat的烧录请参阅： https://docs.petoi.com/v/chinese/arduino-ide/wei-nyboard-shang-chuan-cheng-xu#xia-zai-opencat-ruan-jian-bao
 
-关于代码包中的文件框架解读请参阅： `OpenCat程序框架 <https://petoi-temp.readthedocs.io/en/latest/Petoi/petoi_guide/introduce.html#petoi-opencat>`_
+关于代码包中的文件框架以及token+cmd控制解读请参阅： `OpenCat程序框架 <https://petoi-temp.readthedocs.io/en/latest/Petoi/petoi_guide/introduce.html#petoi-opencat>`_
 
 1.1 第一个Arduino程序：helloWorld：
 ==================================================
