@@ -198,6 +198,8 @@ duration: 发声时长（单位：微秒，此参数为可选参数) – 无符�
 
 Bittle的动作数据通过数组的形式储存在文件InstinctBittle.h中，通过cmd＋token的方式来实现调用。接下来让我们来看一下数组中的每个变量的具体含义，示例代码如下：
 
+.. code-block:: c
+   :linenos:
 
    const int8_t balance[] PROGMEM = { 
    1, 0, 0, 1,
@@ -231,7 +233,8 @@ Bittle的动作数据通过数组的形式储存在文件InstinctBittle.h中，�
 
 如何将设计好的动作写入程序，首先需要了解Opencat对于动作的分类，Opencat框架为了节省有限的存储空间，将动作分为两类：本能和技能；I2C EEPROM (8KB) 存储本能，而Flash (与Arduino程序代码分享32KB存储空间) 存储技能。每个技能数组名称加了一个后缀，“N”表示是新技，“I”表示是本能。一个代码的示例如下：
 
-
+.. code-block:: c
+   :linenos:
 
      const char* skillNameWithType[]={"bdFI","bkI","bkLI","crFI","crLI","mhFI","mhLI","pcFI","phFI","phLI","trFI","trLI","vtFI","vtLI","wkFI","wkLI","balanceI","buttUpI","calibI","droppedI","liftedI","restI","sitI","strI","zeroN","bfI","ckI","climbCeilI","fdI","hiI","jyI","pdI","peeI","puI","rcI","rtI","stpI","testServoI",};
    #if !defined(MAIN_SKETCH) || !defined(I2C_EEPROM)
@@ -248,4 +251,12 @@ Bittle的动作数据通过数组的形式储存在文件InstinctBittle.h中，�
 
 如果想对现有的动作进行修改，且修改的是技能，则直接在 ``InstinctBittle.h`` 中进行修改后重新烧写主程序即可，若是对本能进行修改，则需要进行配置文件的烧写。
 
-最后，如何控制其做出相关动作呢？Petoi采用的是token和cmd的方式，
+最后，如何控制其做出相关动作呢？Petoi采用的是token和cmd的方式，想要更具体的了解请查看 `token+cmd <https://petoi-temp.readthedocs.io/en/latest/Petoi/petoi_guide/introduce.html#opencat-tokencmd>`_ 这里只提供一个简单的示例，假如我想调用已经写好的 ``zero`` 动作组，这只需要使用以下段的代码：
+
+.. code-block:: c
+   :linenos:
+
+   strcpy(newCmd, "zero");
+   token = T_SKILL;
+
+另外一种方式是直接通过串口通讯来发出指令，这种方式在多个设备间的通讯以及远程烧录调试的时候显得尤其方便。同时他是的我们能够把一些繁复的计算通过其他外设的主板(例如openmv)中来进行，只需要对机器狗发出命令就可以了。他的实质与token+cmd的方法是一样的，只是定义了一套串口通信协议，关于这套串口协议的说明， `官方文档 <https://docs.petoi.com/v/chinese/api/chuan-kou-xie-yi>`_给出了详细的说明。
