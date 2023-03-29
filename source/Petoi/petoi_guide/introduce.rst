@@ -279,3 +279,27 @@ Opencat提供了多种token来完成不同的动作，比如执行动作，蜂�
     #define T_SAVE        's'
     #define T_TILT        't'
     #define T_MEOW        'u'
+
+在这里提供一个使用其蜂鸣器的代码示例：
+
+.. code-block:: c
+   :linenos: 
+
+    int8_t melody[] = {15, 2, 8, 4, 10, 4, 12, 4, 13, 4, 15, 2, 8, 2, 8, 2, 0,};
+    cmdLen = strlen(melody);
+    arrayNCPY(dataBuffer, melody, cmdLen);
+    token = T_BEEP_BIN;
+
+``dataBuffer`` 是用来储存所接收到的数据的一个寄存器， ``arrayNCPY`` 的功能大概可以看作人为的模拟了一个类似于串口接收到数据的操作，只不过这里的数据实际上并不是通过串口传输过来的而是通过程序写入的。
+
+将数据存入 ``Buffer`` 后，缓冲待用；这是通过token = T_BEEP_BIN给出蜂鸣器的指令，开发板就会从 ``Buffer`` 中读取数据，然后根据数据执行蜂鸣器的指令操作。
+
+token中很多指令是为了开发板硬件功能调试而设计的，如果只是进行机器狗控制的话，其中较为常有的指令还有 ``T_SKILL`` 作用是使机器狗执行相关的动作，其基本的思路于蜂鸣器的调用相同，但略有区别，代码示例如下：
+
+.. code-block:: c
+   :linenos: 
+
+   strcpy(newCmd, "zero");
+   token = T_SKILL;
+
+相比于蜂鸣器，动作指令更像是向机器狗发布了一条cmd指令，在 ``OpenCat.h`` 中专门封装了一些变量用于token的指令搭配使用，这里使用的newCmd就是其中之一。
